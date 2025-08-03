@@ -1,0 +1,33 @@
+@import url('/src/assets/fonts/fonts.css');
+
+:root {
+  --ff: 'DM Sans', sans-serif;
+  --ff-secondary: 'Climate Crisis', sans-serif;
+
+  --txt: hsl(0, 0%, 95%);
+  --txt-secondary: hsl(0, 0%, 80%);
+
+  --accent: hsl(1, 100%, 69%);
+  --accent-shadow: hsla(1, 100%, 69%, 0.3);
+  --accent-secondary: hsl(145, 71%, 47%);
+
+  --shadow: 0 0 50px 0px hsla(0, 0%, 100%, 0.2);
+  --shadow-txt: 0 4px 0px hsla(0, 0%, 100%, 0.3);
+}
+
+::webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-color: hsl(0, 0%, 5%);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
