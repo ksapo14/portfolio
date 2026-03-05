@@ -29,6 +29,14 @@ h1 {
     pointer-events: none;
 }
 
+p {
+    font-family: var(--ff);
+}
+
+.skill-tag {
+    font-family: var(--ff);
+}
+
 h2:nth-child(2) {
     position: absolute;
     top: 30%;

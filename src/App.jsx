@@ -213,20 +213,14 @@ function App() {
                                 <h1 ref={aboutTitleRef} className="scroll-animate slide-left">About Me</h1>
                                 <div ref={aboutContentRef} className="about-content scroll-animate fade-up delay-1">
                                     <p>
-                                        I'm a passionate full-stack developer with a love for turning innovative ideas into
-                                        digital realities. My journey in tech began with curiosity and has evolved into a
-                                        mission to create meaningful solutions that make a difference.
-                                    </p>
-                                    <p>
-                                        With expertise spanning modern web technologies, I specialize in building scalable
-                                        applications that bridge the gap between complex problems and elegant solutions.
-                                        From React frontends to robust backend architectures, I enjoy every aspect of the
-                                        development process.
-                                    </p>
-                                    <p>
-                                        When I'm not coding, you'll find me exploring new technologies, contributing to
-                                        open-source projects, or mentoring fellow developers. I believe in the power of
-                                        collaboration and continuous learning to drive innovation forward.
+                                        I'm a high School student with a passion for bringing ideas to life through technology. My love 
+                                        for coding started when I took a introductory python class. Since then, I've been on a journey
+                                        to learn and grow as a developer, exploring various programming languages and frameworks. While
+                                        this was interesting yet I wanted to do more, so I started building my own projects. I started to
+                                        help student organizations and clubs with their websites and applications and eventuall took the
+                                        leap to start my own projects. I love the challenge of solving problems and creating solutions that 
+                                        make a difference. Whether it's building a web application, automating tasks, or exploring new 
+                                        technologies, I'm always eager to learn and take on new challenges.
                                     </p>
                                     <div className="skills-section">
                                         <h3>Tech Stack</h3>
@@ -236,11 +230,9 @@ function App() {
                                             <span className="skill-tag">JavaScript</span>
                                             <span className="skill-tag">TypeScript</span>
                                             <span className="skill-tag">Python</span>
-                                            <span className="skill-tag">MongoDB</span>
-                                            <span className="skill-tag">PostgreSQL</span>
-                                            <span className="skill-tag">AWS</span>
-                                            <span className="skill-tag">Docker</span>
+                                            <span className="skill-tag">Django</span>
                                             <span className="skill-tag">Git</span>
+                                            <span className="skill-tag">PyTorch</span>
                                         </div>
                                     </div>
                                 </div>
