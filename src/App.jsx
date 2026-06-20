@@ -1,6 +1,47 @@
 import Navbar from './navbar/Navbar';
 import { useEffect, useRef, useState } from 'react';
+import computers4ChangeImage from './assets/images/computers4change.png';
+import kairsImage from './assets/images/kairs.png';
+import artisanalImage from './assets/artisanal_restraunt.png';
 import './app.css'
+
+const aboutStories = [
+    {
+        id: 'spark',
+        eyebrow: '01 / First Spark',
+        title: 'First Spark',
+        detail: 'Coding started as a class, but it quickly became the place where ideas felt buildable. Python gave me the first push: small scripts, experiments, and the feeling that I could make something useful from nothing.'
+    },
+    {
+        id: 'people',
+        eyebrow: '02 / Building for People',
+        title: 'Building for People',
+        detail: 'The work became more meaningful when it helped other students. I began building websites and applications for organizations that needed a cleaner way to share their mission, manage ideas, or reach more people.'
+    },
+    {
+        id: 'focus',
+        eyebrow: '03 / Current Focus',
+        title: 'Current Focus',
+        detail: 'Right now I am growing as a full-stack developer while exploring ML with tools like PyTorch. I like projects that mix practical interfaces with smarter systems behind the scenes.'
+    },
+    {
+        id: 'drive',
+        eyebrow: '04 / What Drives Me',
+        title: 'What Drives Me',
+        detail: 'The best part of building is taking an idea that sounds impossible at first and breaking it into pieces until it becomes real. I care about useful products, clear design, and learning fast enough to keep improving.'
+    }
+];
+
+const techStack = [
+    'React',
+    'Node.js',
+    'JavaScript',
+    'TypeScript',
+    'Python',
+    'Django',
+    'Git',
+    'PyTorch'
+];
 
 function App() {
     const bgGridRef = useRef(null);
@@ -8,6 +49,7 @@ function App() {
     const mouseFollowRef = useRef(null);
     const kairsRef = useRef(null);
     const comp4changeRef = useRef(null);
+    const artisanalRef = useRef(null);
     const loadingRef = useRef(null);
     const mouseFollowImageRef = useRef(null);
 
@@ -22,6 +64,10 @@ function App() {
     const navbarRef = useRef(null);
 
     const [contentLoaded, setContentLoaded] = useState(false);
+    const [activeAboutStory, setActiveAboutStory] = useState(aboutStories[0].id);
+    const [profileImageReady, setProfileImageReady] = useState(true);
+
+    const activeStory = aboutStories.find((story) => story.id === activeAboutStory) ?? aboutStories[0];
 
     // Scroll Animation Hook
     useEffect(() => {
@@ -52,7 +98,8 @@ function App() {
             aboutContentRef.current,
             aboutImageRef.current,
             comp4changeRef.current,
-            kairsRef.current
+            kairsRef.current,
+            artisanalRef.current
         ].filter(Boolean);
 
         elementsToAnimate.forEach((el) => {
@@ -111,39 +158,56 @@ function App() {
 
         const comp4change = comp4changeRef.current;
         const kairs = kairsRef.current;
+        const artisanal = artisanalRef.current;
         const mouseFollowImage = mouseFollowImageRef.current;
+        const projects = [
+            {
+                element: comp4change,
+                url: 'https://computers4change.org',
+                preview: computers4ChangeImage
+            },
+            {
+                element: kairs,
+                url: 'https://kairs.ai',
+                preview: kairsImage
+            },
+            {
+                element: artisanal,
+                url: 'https://artisanal-restraunt.vercel.app/',
+                preview: artisanalImage
+            }
+        ].filter((project) => project.element);
 
         function showWebImage(e) {
-            const kairsImage = "src/assets/images/kairs.png";
+            const project = projects.find(({ element }) => element === e.currentTarget);
+            if (!project) return;
 
-            const img1 = new Image();
-            img1.src = kairsImage;
-            // Show the image and set its source depending on the hovered element
             mouseFollowImage.style.display = "block";
-            mouseFollowImage.style.width = `${img1.width / 10}px`;
-            mouseFollowImage.style.height = `${img1.height / 10}px`;
-
-            if (e.target === comp4change) {
-                mouseFollowImage.style.backgroundImage = "url('src/assets/images/computers4change.png')";
-            } else if (e.target === kairs) {
-                mouseFollowImage.style.backgroundImage = "url('src/assets/images/kairs.png')";
-            }
-
-            // Position the image at the mouse cursor
+            mouseFollowImage.style.width = "320px";
+            mouseFollowImage.style.height = "190px";
+            mouseFollowImage.style.backgroundImage = `url('${project.preview}')`;
             mouseFollowImage.style.position = "fixed";
             mouseFollowImage.style.pointerEvents = "none";
-            mouseFollowImage.style.left = `${e.clientX - 100}px`; // Center the image
-            mouseFollowImage.style.top = `${e.clientY - 100}px`;
+            mouseFollowImage.style.left = `${e.clientX - 160}px`;
+            mouseFollowImage.style.top = `${e.clientY - 95}px`;
         }
 
-        // Update image position as mouse moves over the project cards
-        [comp4change, kairs].forEach(el => {
-            el.addEventListener('mousemove', showWebImage);
-            el.addEventListener('click', () => window.open((el === comp4change ? 'https://computers4change.org' : 'https://kairs.ai'), '_blank'));
-            el.addEventListener('mouseleave', () => {
-                mouseFollowImage.style.backgroundImage = '';
-                mouseFollowImage.style.display = 'none';
-            });
+        function hideWebImage() {
+            mouseFollowImage.style.backgroundImage = '';
+            mouseFollowImage.style.display = 'none';
+        }
+
+        function openProject(e) {
+            const project = projects.find(({ element }) => element === e.currentTarget);
+            if (project) {
+                window.open(project.url, '_blank');
+            }
+        }
+
+        projects.forEach(({ element }) => {
+            element.addEventListener('mousemove', showWebImage);
+            element.addEventListener('mouseleave', hideWebImage);
+            element.addEventListener('click', openProject);
         });
 
         function handleMouseMove(e) {
@@ -173,12 +237,10 @@ function App() {
         return () => {
             document.removeEventListener('mousemove', handleMouseMove);
 
-            [comp4change, kairs].forEach(el => {
-                el.removeEventListener('mousemove', showWebImage);
-                el.removeEventListener('mouseleave', () => {
-                    mouseFollowImage.style.backgroundImage = '';
-                    mouseFollowImage.style.display = 'none';
-                });
+            projects.forEach(({ element }) => {
+                element.removeEventListener('mousemove', showWebImage);
+                element.removeEventListener('mouseleave', hideWebImage);
+                element.removeEventListener('click', openProject);
             });
         };
     }, [contentLoaded]); // This effect depends on contentLoaded
@@ -200,7 +262,7 @@ function App() {
                                 <rect width="100%" height="100%" fill="url(#grid)" />
                             </svg>
                         </div>
-                        <h2 ref={subTitle1Ref} className="scroll-animate fade-up">Full Stack Developer</h2>
+                        <h2 ref={subTitle1Ref} className="scroll-animate fade-up">Aspiring Sowftware Developer & ML Engineer</h2>
                         <h1 ref={mainTitleRef} className='mainTitle scroll-animate scale-up'>Krish Sapovadia</h1>
                         <h2 ref={subTitle2Ref} className="scroll-animate fade-up delay-1">Taking students ideas and making them realities.</h2>
                         <div className="circle"></div>
@@ -212,36 +274,59 @@ function App() {
                             <div className="about-text">
                                 <h1 ref={aboutTitleRef} className="scroll-animate slide-left">About Me</h1>
                                 <div ref={aboutContentRef} className="about-content scroll-animate fade-up delay-1">
-                                    <p>
-                                        I'm a high School student with a passion for bringing ideas to life through technology. My love 
-                                        for coding started when I took a introductory python class. Since then, I've been on a journey
-                                        to learn and grow as a developer, exploring various programming languages and frameworks. While
-                                        this was interesting yet I wanted to do more, so I started building my own projects. I started to
-                                        help student organizations and clubs with their websites and applications and eventuall took the
-                                        leap to start my own projects. I love the challenge of solving problems and creating solutions that 
-                                        make a difference. Whether it's building a web application, automating tasks, or exploring new 
-                                        technologies, I'm always eager to learn and take on new challenges.
+                                    <p className="about-lede">
+                                        I am a high school student building software that helps ideas move from sketch to shipped. I care about clean interfaces, useful tools, and learning the systems behind the products I want to create.
                                     </p>
+                                    <div className="about-story-grid">
+                                        <div className="about-story-list" aria-label="About story chapters">
+                                            {aboutStories.map((story) => (
+                                                <button
+                                                    key={story.id}
+                                                    type="button"
+                                                    className={`about-story-card ${activeAboutStory === story.id ? 'active' : ''}`}
+                                                    onClick={() => setActiveAboutStory(story.id)}
+                                                    aria-pressed={activeAboutStory === story.id}
+                                                >
+                                                    <strong>{story.title}</strong>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <div className="about-story-detail" aria-live="polite">
+                                            <span>{activeStory.eyebrow}</span>
+                                            <h3>{activeStory.title}</h3>
+                                            <p>{activeStory.detail}</p>
+                                        </div>
+                                    </div>
                                     <div className="skills-section">
                                         <h3>Tech Stack</h3>
-                                        <div className="skills-grid">
-                                            <span className="skill-tag">React</span>
-                                            <span className="skill-tag">Node.js</span>
-                                            <span className="skill-tag">JavaScript</span>
-                                            <span className="skill-tag">TypeScript</span>
-                                            <span className="skill-tag">Python</span>
-                                            <span className="skill-tag">Django</span>
-                                            <span className="skill-tag">Git</span>
-                                            <span className="skill-tag">PyTorch</span>
-                                        </div>
+                                        <ul className="skills-list">
+                                            {techStack.map((skill) => (
+                                                <li
+                                                    key={skill}
+                                                    className="skill-tag"
+                                                    tabIndex="0"
+                                                >
+                                                    {skill}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div className="about-image-container">
+                            <div className="about-side">
                                 <div ref={aboutImageRef} className="about-image scroll-animate scale-up delay-2">
-                                    <div className="profile-placeholder">
-                                        <div className="profile-icon">👨‍💻</div>
-                                    </div>
+                                    {profileImageReady ? (
+                                        <img
+                                            src="/src/assets/images/profile.jpg"
+                                            alt="Krish Sapovadia"
+                                            onError={() => setProfileImageReady(false)}
+                                        />
+                                    ) : (
+                                        <div className="profile-placeholder">
+                                            <div className="profile-initials">KS</div>
+                                            <p>Profile photo ready</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -254,6 +339,9 @@ function App() {
                         </button>
                         <button className='project-card scroll-animate slide-right delay-2' ref={kairsRef}>
                             <h1>Kairs - The AI Based Knee Brace</h1>
+                        </button>
+                        <button className='project-card scroll-animate slide-right delay-3' ref={artisanalRef}>
+                            <h1>Artisanal Restraunt</h1>
                         </button>
                         <div className="mouse-follow-image" ref={mouseFollowImageRef}></div>
                     </section>
