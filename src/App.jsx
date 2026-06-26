@@ -1,9 +1,13 @@
 import Navbar from './navbar/Navbar';
 import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import CursorGlowBlob from './components/CursorGlowBlob';
 import computers4ChangeImage from './assets/images/computers4change.png';
 import kairsImage from './assets/images/kairs.png';
 import artisanalImage from './assets/artisanal_restraunt.png';
-import './app.css'
+import krishImage from './assets/krish.jpg';
+import './app.css';
 
 const aboutStories = [
     {
@@ -22,7 +26,7 @@ const aboutStories = [
         id: 'focus',
         eyebrow: '03 / Current Focus',
         title: 'Current Focus',
-        detail: 'Right now I am growing as a full-stack developer while exploring ML with tools like PyTorch. I like projects that mix practical interfaces with smarter systems behind the scenes.'
+        detail: 'Right now I\'m growing as a full-stack developer while exploring the use of LLMs and the integration of native ML algorithms into systems. I like mixing practical interfaces with smarter systems behind the scenes.'
     },
     {
         id: 'drive',
@@ -34,19 +38,38 @@ const aboutStories = [
 
 const techStack = [
     'React',
-    'Node.js',
     'JavaScript',
     'TypeScript',
     'Python',
     'Django',
     'Git',
-    'PyTorch'
+    'PyTorch',
+    'SQL',
+    'FastAPI',
+    'Docker',
+    'C/C++',
+    'AI Workflows',
 ];
 
+const contactLinks = [
+    {
+        label: 'GitHub',
+        href: 'https://github.com/ksapo14'
+    },
+    {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/krish-sapovadia-898b0639a/'
+    },
+    {
+        label: 'Instagram',
+        href: 'https://www.instagram.com/krish.sapovadia14/'
+    }
+];
+
+gsap.registerPlugin(ScrollToPlugin);
+
 function App() {
-    const bgGridRef = useRef(null);
-    const gridContainerRef = useRef(null);
-    const mouseFollowRef = useRef(null);
+    const cursorDotRef = useRef(null);
     const kairsRef = useRef(null);
     const comp4changeRef = useRef(null);
     const artisanalRef = useRef(null);
@@ -61,6 +84,8 @@ function App() {
     const aboutTitleRef = useRef(null);
     const aboutContentRef = useRef(null);
     const aboutImageRef = useRef(null);
+    const contactTitleRef = useRef(null);
+    const contactContentRef = useRef(null);
     const navbarRef = useRef(null);
 
     const [contentLoaded, setContentLoaded] = useState(false);
@@ -68,6 +93,22 @@ function App() {
     const [profileImageReady, setProfileImageReady] = useState(true);
 
     const activeStory = aboutStories.find((story) => story.id === activeAboutStory) ?? aboutStories[0];
+
+    const scrollToSection = (sectionId) => {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        gsap.to(window, {
+            duration: 0.85,
+            ease: 'power3.out',
+            overwrite: 'auto',
+            scrollTo: {
+                y: section,
+                offsetY: sectionId === 'home' ? 0 : 16,
+                autoKill: true
+            }
+        });
+    };
 
     // Scroll Animation Hook
     useEffect(() => {
@@ -97,6 +138,8 @@ function App() {
             aboutTitleRef.current,
             aboutContentRef.current,
             aboutImageRef.current,
+            contactTitleRef.current,
+            contactContentRef.current,
             comp4changeRef.current,
             kairsRef.current,
             artisanalRef.current
@@ -118,21 +161,9 @@ function App() {
 
         window.addEventListener('scroll', handleScroll);
 
-        // Parallax effect for grid background
-        const handleParallax = () => {
-            const scrolled = window.pageYOffset;
-            const gridContainer = gridContainerRef.current;
-            if (gridContainer) {
-                gridContainer.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-        };
-
-        window.addEventListener('scroll', handleParallax);
-
         return () => {
             observer.disconnect();
             window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('scroll', handleParallax);
         };
     }, [contentLoaded]);
 
@@ -149,12 +180,50 @@ function App() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Mouse animation effect - separate useEffect that runs after content loads
+    useEffect(() => {
+        if (!contentLoaded) return;
+
+        const cursorDot = cursorDotRef.current;
+        if (!cursorDot) return;
+
+        let animationFrame = null;
+        const current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        const target = { x: current.x, y: current.y };
+
+        const updateCursor = () => {
+            current.x += (target.x - current.x) * 0.35;
+            current.y += (target.y - current.y) * 0.35;
+            cursorDot.style.transform = `translate3d(${current.x}px, ${current.y}px, 0) translate(-50%, -50%)`;
+            animationFrame = requestAnimationFrame(updateCursor);
+        };
+
+        const handlePointerMove = (event) => {
+            target.x = event.clientX;
+            target.y = event.clientY;
+            cursorDot.classList.add('visible');
+        };
+
+        const handlePointerLeave = () => {
+            cursorDot.classList.remove('visible');
+        };
+
+        window.addEventListener('pointermove', handlePointerMove, { passive: true });
+        document.addEventListener('mouseleave', handlePointerLeave);
+        animationFrame = requestAnimationFrame(updateCursor);
+
+        return () => {
+            window.removeEventListener('pointermove', handlePointerMove);
+            document.removeEventListener('mouseleave', handlePointerLeave);
+
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        };
+    }, [contentLoaded]);
+
+    // Project preview cursor effect
     useEffect(() => {
         if (!contentLoaded) return; // Don't run if content isn't loaded yet
-
-        const gridContainer = gridContainerRef.current;
-        const mouseFollow = mouseFollowRef.current;
 
         const comp4change = comp4changeRef.current;
         const kairs = kairsRef.current;
@@ -210,33 +279,8 @@ function App() {
             element.addEventListener('click', openProject);
         });
 
-        function handleMouseMove(e) {
-            if (gridContainer) {
-                const rect = gridContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                // Update CSS custom properties for the light effect
-                gridContainer.style.setProperty('--mouse-x', `${x}px`);
-                gridContainer.style.setProperty('--mouse-y', `${y}px`);
-            }
-
-            // Update mouse follow element
-            if (mouseFollow) {
-                const followRect = mouseFollow.getBoundingClientRect();
-                const halfWidth = followRect.width / 2;
-                const halfHeight = followRect.height / 2;
-                mouseFollow.style.transform = `translate(${e.clientX - halfWidth}px, ${e.clientY - halfHeight}px)`;
-            }
-        }
-
-        // Add global mouse move listener for mouse follow
-        document.addEventListener('mousemove', handleMouseMove);
-
         // Cleanup
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-
             projects.forEach(({ element }) => {
                 element.removeEventListener('mousemove', showWebImage);
                 element.removeEventListener('mouseleave', hideWebImage);
@@ -245,107 +289,188 @@ function App() {
         };
     }, [contentLoaded]); // This effect depends on contentLoaded
 
+    function handleContactSubmit(e) {
+        e.preventDefault();
+    }
+
     return (
         <>
             {contentLoaded ? (
                 <>
-                    <Navbar ref={navbarRef} />
-                    <section className="page" id='home'>
-                        <div className="grid-container accent-light" ref={gridContainerRef}>
-                            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" ref={bgGridRef}>
-                                <defs>
-                                    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-                                        <rect width="80" height="80" fill="transparent" />
-                                        <path d="M 80 0 L 0 0 0 80" fill="none" stroke="hsla(0, 0%, 95%, 0.1)" strokeWidth="1" />
-                                    </pattern>
-                                </defs>
-                                <rect width="100%" height="100%" fill="url(#grid)" />
-                            </svg>
-                        </div>
-                        <h2 ref={subTitle1Ref} className="scroll-animate fade-up">Aspiring Sowftware Developer & ML Engineer</h2>
-                        <h1 ref={mainTitleRef} className='mainTitle scroll-animate scale-up'>Krish Sapovadia</h1>
-                        <h2 ref={subTitle2Ref} className="scroll-animate fade-up delay-1">Taking students ideas and making them realities.</h2>
-                        <div className="circle"></div>
-                        <div className="circle"></div>
-                    </section>
+                    <Navbar ref={navbarRef} onNavigate={scrollToSection} />
+                    <main className="site-flow">
+                        <div className="ambient-backdrop" aria-hidden="true"></div>
+                        <div className="cursor-dot" ref={cursorDotRef} aria-hidden="true"></div>
+                        <CursorGlowBlob
+                            size={270}
+                            particleCount={34}
+                            color="255, 94, 89"
+                            accentColor="255, 146, 122"
+                            opacity={1.38}
+                            blur={36}
+                            stiffness={0.08}
+                            damping={0.82}
+                            edgeStrength={1.2}
+                            ambientStrength={1.18}
+                            zIndex={0}
+                            blendMode="screen"
+                        />
 
-                    <section className="page about" id='about'>
-                        <div className="about-container">
-                            <div className="about-text">
-                                <h1 ref={aboutTitleRef} className="scroll-animate slide-left">About Me</h1>
-                                <div ref={aboutContentRef} className="about-content scroll-animate fade-up delay-1">
-                                    <p className="about-lede">
-                                        I am a high school student building software that helps ideas move from sketch to shipped. I care about clean interfaces, useful tools, and learning the systems behind the products I want to create.
+                        <section className="page hero" id='home'>
+                            <h2 ref={subTitle1Ref} className="scroll-animate fade-up">Aspiring AI/ML and Software Engineer</h2>
+                            <h1 ref={mainTitleRef} className='mainTitle scroll-animate scale-up'>Krish Sapovadia</h1>
+                            <h2 ref={subTitle2Ref} className="scroll-animate fade-up delay-1">Taking students ideas and making them realities.</h2>
+                            <div className="circle"></div>
+                            <div className="circle"></div>
+                        </section>
+
+                        <section className="page about" id='about'>
+                            <div className="about-container">
+                                <div className="about-text">
+                                    <h1 ref={aboutTitleRef} className="scroll-animate slide-left">About Me</h1>
+                                    <div ref={aboutContentRef} className="about-content scroll-animate fade-up delay-1">
+                                        <p className="about-lede">
+                                            I am a high school student building software that helps ideas move from sketch to shipped. I care about clean interfaces, useful tools, and learning the systems behind the products I want to create.
+                                        </p>
+                                        <div className="about-story-grid">
+                                            <div className="about-story-list" aria-label="About story chapters">
+                                                {aboutStories.map((story) => (
+                                                    <button
+                                                        key={story.id}
+                                                        type="button"
+                                                        className={`about-story-card ${activeAboutStory === story.id ? 'active' : ''}`}
+                                                        onClick={() => setActiveAboutStory(story.id)}
+                                                        aria-pressed={activeAboutStory === story.id}
+                                                    >
+                                                        <strong>{story.title}</strong>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <div className="about-story-detail" aria-live="polite">
+                                                <span>{activeStory.eyebrow}</span>
+                                                <h3>{activeStory.title}</h3>
+                                                <p>{activeStory.detail}</p>
+                                            </div>
+                                        </div>
+                                        <div className="skills-section">
+                                            <h3>Tech Stack</h3>
+                                            <ul className="skills-list">
+                                                {techStack.map((skill) => (
+                                                    <li
+                                                        key={skill}
+                                                        className="skill-tag"
+                                                        tabIndex="0"
+                                                    >
+                                                        {skill}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="about-side">
+                                    <div ref={aboutImageRef} className="about-image scroll-animate scale-up delay-2">
+                                        {profileImageReady ? (
+                                            <img
+                                                src={krishImage}
+                                                alt="Krish Sapovadia"
+                                                onError={() => setProfileImageReady(false)}
+                                            />
+                                        ) : (
+                                            <div className="profile-placeholder">
+                                                <div className="profile-initials">KS</div>
+                                                <p>Profile photo ready</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="page projects" id='projects'>
+                            <h1 ref={projectsTitleRef} className="scroll-animate slide-left">Projects</h1>
+                            <button className='project-card scroll-animate slide-right delay-1' ref={comp4changeRef}>
+                                <h1>Computers4Change - Tech Recycling for All</h1>
+                            </button>
+                            <button className='project-card scroll-animate slide-right delay-2' ref={kairsRef}>
+                                <h1>Kairs - The AI Based Knee Brace</h1>
+                            </button>
+                            <button className='project-card scroll-animate slide-right delay-3' ref={artisanalRef}>
+                                <h1>Artisanal Restraunt</h1>
+                            </button>
+                            <div className="mouse-follow-image" ref={mouseFollowImageRef}></div>
+                        </section>
+
+                        <section className="page contact" id='contact'>
+                            <div className="contact-container">
+                                <div className="contact-copy">
+                                    <span className="contact-eyebrow">Open to collaborate</span>
+                                    <h1 ref={contactTitleRef} className="scroll-animate slide-left">Contact</h1>
+                                    <p>
+                                        Have an idea, project, or internship opportunity? Send the details and I will get back to you.
                                     </p>
-                                    <div className="about-story-grid">
-                                        <div className="about-story-list" aria-label="About story chapters">
-                                            {aboutStories.map((story) => (
-                                                <button
-                                                    key={story.id}
-                                                    type="button"
-                                                    className={`about-story-card ${activeAboutStory === story.id ? 'active' : ''}`}
-                                                    onClick={() => setActiveAboutStory(story.id)}
-                                                    aria-pressed={activeAboutStory === story.id}
+                                    <div className="contact-details" aria-label="Contact details">
+                                        <p>Email: kcsapovadia@gmail.com</p>
+                                        <p>Phone: 704-677-2939</p>
+                                    </div>
+                                    <div className="contact-links" aria-label="Direct contact links">
+                                        {contactLinks.map((link) => (
+                                            link.href ? (
+                                                <a
+                                                    key={link.label}
+                                                    href={link.href}
+                                                    target={link.href.startsWith('http') ? '_blank' : undefined}
+                                                    rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
                                                 >
-                                                    <strong>{story.title}</strong>
+                                                    {link.label}
+                                                </a>
+                                            ) : (
+                                                <button key={link.label} type="button" disabled>
+                                                    {link.label}
                                                 </button>
-                                            ))}
-                                        </div>
-                                        <div className="about-story-detail" aria-live="polite">
-                                            <span>{activeStory.eyebrow}</span>
-                                            <h3>{activeStory.title}</h3>
-                                            <p>{activeStory.detail}</p>
-                                        </div>
-                                    </div>
-                                    <div className="skills-section">
-                                        <h3>Tech Stack</h3>
-                                        <ul className="skills-list">
-                                            {techStack.map((skill) => (
-                                                <li
-                                                    key={skill}
-                                                    className="skill-tag"
-                                                    tabIndex="0"
-                                                >
-                                                    {skill}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                            )
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
-                            <div className="about-side">
-                                <div ref={aboutImageRef} className="about-image scroll-animate scale-up delay-2">
-                                    {profileImageReady ? (
-                                        <img
-                                            src="/src/assets/images/profile.jpg"
-                                            alt="Krish Sapovadia"
-                                            onError={() => setProfileImageReady(false)}
-                                        />
-                                    ) : (
-                                        <div className="profile-placeholder">
-                                            <div className="profile-initials">KS</div>
-                                            <p>Profile photo ready</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </section>
 
-                    <section className="page projects" id='projects'>
-                        <h1 ref={projectsTitleRef} className="scroll-animate slide-left">Projects</h1>
-                        <button className='project-card scroll-animate slide-right delay-1' ref={comp4changeRef}>
-                            <h1>Computers4Change - Tech Recycling for All</h1>
-                        </button>
-                        <button className='project-card scroll-animate slide-right delay-2' ref={kairsRef}>
-                            <h1>Kairs - The AI Based Knee Brace</h1>
-                        </button>
-                        <button className='project-card scroll-animate slide-right delay-3' ref={artisanalRef}>
-                            <h1>Artisanal Restraunt</h1>
-                        </button>
-                        <div className="mouse-follow-image" ref={mouseFollowImageRef}></div>
-                    </section>
-                    <div className="mousefollow" ref={mouseFollowRef}></div>
+                                <form ref={contactContentRef} className="contact-form scroll-animate fade-up delay-1" onSubmit={handleContactSubmit}>
+                                    <div className="form-row">
+                                        <label htmlFor="contact-name">
+                                            Name
+                                            <input id="contact-name" name="name" type="text" autoComplete="name" required />
+                                        </label>
+                                        <label htmlFor="contact-email">
+                                            Email
+                                            <input id="contact-email" name="email" type="email" autoComplete="email" required />
+                                        </label>
+                                    </div>
+
+                                    <div className="form-row">
+                                        <label htmlFor="contact-subject">
+                                            Subject
+                                            <input id="contact-subject" name="subject" type="text" required />
+                                        </label>
+                                        <label htmlFor="contact-type">
+                                            Type
+                                            <select id="contact-type" name="type" defaultValue="project">
+                                                <option value="project">Project</option>
+                                                <option value="internship">Internship</option>
+                                                <option value="collaboration">Collaboration</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </label>
+                                    </div>
+
+                                    <label htmlFor="contact-message">
+                                        Message
+                                        <textarea id="contact-message" name="message" rows="6" required />
+                                    </label>
+
+                                    <button type="submit" className="contact-submit">Send Message</button>
+                                </form>
+                            </div>
+                        </section>
+                    </main>
                 </>
             ) : (
                 <div className="loading-screen" ref={loadingRef}>

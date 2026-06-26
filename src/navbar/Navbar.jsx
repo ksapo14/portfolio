@@ -1,8 +1,13 @@
 import './navbar.css';
 import { useRef, useEffect } from 'react';
 
-function Navbar() {
+function Navbar({ onNavigate }) {
     const navbarRef = useRef(null);
+
+    const handleNavClick = (event, sectionId) => {
+        event.preventDefault();
+        onNavigate(sectionId);
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -23,10 +28,10 @@ function Navbar() {
 
     return (
         <nav ref={navbarRef}>
-            <a href="#">Home</a>
-            <a href="#about">About</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
+            <a href="#home" onClick={(event) => handleNavClick(event, 'home')}>Home</a>
+            <a href="#about" onClick={(event) => handleNavClick(event, 'about')}>About</a>
+            <a href="#projects" onClick={(event) => handleNavClick(event, 'projects')}>Projects</a>
+            <a href="#contact" onClick={(event) => handleNavClick(event, 'contact')}>Contact</a>
         </nav>
     );
 }

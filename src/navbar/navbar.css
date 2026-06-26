@@ -19,10 +19,13 @@ nav {
 
 /* Option 1: Keep position fixed, no layout shift */
 nav.scrolled {
-    background-color: rgba(77, 77, 77, 0.7);
-    backdrop-filter: blur(1px);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+        rgba(10, 10, 12, 0.72);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 50px;
-    /* box-shadow: var(--shadow); */
+    box-shadow: 0 14px 42px rgba(0, 0, 0, 0.24);
     margin: 1rem auto;
     /* Use margin instead of transform for spacing */
     width: 95%;
@@ -59,4 +62,25 @@ nav a:hover {
     color: var(--accent);
     text-shadow: var(--shadow-txt);
     transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    nav {
+        justify-content: center;
+        gap: 0.2rem;
+    }
+
+    nav a {
+        padding: 1rem 0.65rem 0;
+        font-size: 0.92rem;
+    }
+
+    nav a:nth-child(3) {
+        margin-left: 0;
+    }
+
+    nav.scrolled {
+        width: calc(100% - 1rem);
+        left: 0.5rem;
+    }
 }

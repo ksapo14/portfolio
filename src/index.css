@@ -15,8 +15,33 @@
   --shadow-txt: 0 4px 0px hsla(0, 0%, 100%, 0.3);
 }
 
-::webkit-scrollbar {
-  display: none;
+html {
+  scrollbar-color: hsla(1, 100%, 69%, 0.78) hsl(0, 0%, 6%);
+  scrollbar-width: auto;
+}
+
+::-webkit-scrollbar {
+  width: 18px;
+}
+
+::-webkit-scrollbar-track {
+  border: 5px solid transparent;
+  background:
+    linear-gradient(to bottom, hsl(0, 0%, 6%), hsl(350, 20%, 9%), hsl(0, 0%, 6%)) content-box;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 5px solid transparent;
+  border-radius: 999px;
+  background:
+    linear-gradient(to bottom, hsla(1, 100%, 76%, 0.95), hsla(1, 100%, 58%, 0.86)) content-box;
+  min-height: 52px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(to bottom, hsl(1, 100%, 78%), hsl(1, 100%, 62%));
 }
 
 body {
@@ -25,9 +50,4 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
 }
