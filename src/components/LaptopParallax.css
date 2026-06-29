@@ -1,0 +1,104 @@
+.laptop-stage {
+    perspective: 1600px;
+    perspective-origin: 50% 46%;
+}
+
+.laptop {
+    transform: scale(0.34) rotateX(-14deg) rotateY(24deg) rotateZ(-3deg);
+    transform-style: preserve-3d;
+    transform-origin: center;
+    will-change: transform;
+}
+
+.laptop-lid {
+    background: linear-gradient(145deg, #3d3d3d 0%, #111 48%, #050505 100%);
+    box-shadow:
+        0 2.5rem 5rem rgb(0 0 0 / 28%),
+        inset 0 0 0 1px rgb(255 255 255 / 14%);
+    transform: translateZ(0.1rem);
+}
+
+.laptop-screen {
+    transform: translateZ(0.12rem);
+    will-change: border-radius;
+}
+
+.laptop.is-entered {
+    transform: none !important;
+    transform-style: flat;
+    will-change: auto;
+}
+
+.laptop.is-entered .laptop-lid,
+.laptop.is-entered .laptop-screen {
+    transform: none;
+}
+
+.laptop-hinge {
+    background: linear-gradient(90deg, #111, #777 18%, #222 50%, #777 82%, #111);
+    transform: translateZ(-0.2rem);
+}
+
+.laptop-base {
+    background:
+        linear-gradient(90deg, rgb(255 255 255 / 18%), transparent 18% 82%, rgb(0 0 0 / 7%)),
+        linear-gradient(180deg, #c9c9c9, #a8a8a8 72%, #747474);
+    clip-path: polygon(3.5% 0, 96.5% 0, 100% 91%, 98% 100%, 2% 100%, 0 91%);
+    box-shadow:
+        0 2rem 3rem rgb(0 0 0 / 22%),
+        inset 0 1px 0 rgb(255 255 255 / 62%);
+    transform: rotateX(68deg);
+    transform-origin: center top;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+}
+
+.laptop-key {
+    background: linear-gradient(145deg, #353535, #111);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 13%),
+        0 1px 1px rgb(0 0 0 / 32%);
+}
+
+.keyboard-row:last-child .laptop-key:nth-child(4) {
+    flex: 4.8;
+}
+
+.laptop-speaker {
+    background-image: radial-gradient(circle, #444 0 0.08rem, transparent 0.09rem);
+    background-size: 0.34rem 0.34rem;
+}
+
+.laptop-trackpad {
+    background: linear-gradient(145deg, rgb(255 255 255 / 11%), rgb(0 0 0 / 3%));
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / 25%);
+}
+
+@keyframes scroll-nudge {
+    50% {
+        transform: translateY(0.35rem);
+    }
+}
+
+@keyframes search-caret-blink {
+    0%,
+    48% {
+        opacity: 1;
+    }
+
+    49%,
+    100% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .laptop {
+        transform: scale(0.52) rotateX(-14deg) rotateY(24deg) rotateZ(-3deg);
+    }
+
+    .keyboard-deck {
+        width: 94vw;
+        transform: perspective(900px) rotateX(4deg);
+    }
+}
