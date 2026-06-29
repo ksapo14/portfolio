@@ -59,7 +59,7 @@ function ScrollStatusBar() {
 
     return (
         <div
-            className={`fixed top-1/2 right-[clamp(0.7rem,1.6vw,1.5rem)] z-[80] flex -translate-y-1/2 flex-col items-center gap-2 transition-opacity duration-300 motion-reduce:transition-none ${
+            className={`fixed top-1/2 right-[clamp(0.7rem,1.6vw,1.5rem)] z-[80] flex -translate-y-1/2 flex-col items-center gap-2 transition-opacity duration-300 max-md:right-1.5 max-md:gap-1 motion-reduce:transition-none ${
                 progress > 0.001 ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
             role="progressbar"
@@ -68,7 +68,7 @@ function ScrollStatusBar() {
             aria-valuemax="100"
             aria-valuenow={percentage}
         >
-            <div className="relative h-[min(54vh,24rem)] w-[0.58rem] overflow-hidden rounded-full border border-white/65 bg-black/12 shadow-[0_0.35rem_1.1rem_rgb(0_0_0_/_12%),inset_0_0_0_1px_rgb(0_0_0_/_5%)] backdrop-blur-md">
+            <div className="relative h-[min(54vh,24rem)] w-[0.58rem] overflow-hidden rounded-full border border-white/65 bg-black/12 shadow-[0_0.35rem_1.1rem_rgb(0_0_0_/_12%),inset_0_0_0_1px_rgb(0_0_0_/_5%)] backdrop-blur-md max-md:h-[28vh] max-md:w-[0.32rem]">
                 <span
                     className="absolute right-0 bottom-0 left-0 rounded-full transition-[height,background-color] duration-100 ease-linear"
                     style={{
@@ -79,7 +79,7 @@ function ScrollStatusBar() {
                     aria-hidden="true"
                 />
             </div>
-            <span className="text-[0.62rem] font-semibold tracking-[0.06em] text-black/45 tabular-nums">
+            <span className="text-[0.62rem] font-semibold tracking-[0.06em] text-black/45 tabular-nums max-md:hidden">
                 {percentage}%
             </span>
         </div>

@@ -208,7 +208,7 @@ function KeyboardSkillsScene({
                             Search
                         </span>
                         <span
-                            className="flex min-w-0 flex-1 items-center text-[clamp(1rem,2vw,1.6rem)] font-semibold tracking-[0.04em] text-black outline-none [font-family:Helvetica,Arial,sans-serif]"
+                            className="flex min-w-0 flex-1 items-center text-[clamp(1rem,2vw,1.6rem)] font-semibold tracking-[0.04em] text-black outline-none [font-family:'Archivo',sans-serif]"
                             role="textbox"
                             tabIndex="0"
                             aria-label="Virtual keyboard search"
@@ -235,8 +235,8 @@ function KeyboardSkillsScene({
                     </label>
                 </div>
 
-                <div className="keyboard-deck w-[min(92vw,78rem)] rounded-[clamp(0.8rem,2vw,1.8rem)] border border-black/15 bg-[linear-gradient(145deg,#d4d5d3,#9fa3a2)] p-[clamp(0.7rem,1.8vw,1.6rem)] shadow-[0_2.4rem_5rem_rgb(31_37_38_/_24%),inset_0_1px_0_rgb(255_255_255_/_80%)] [font-family:Helvetica,Arial,sans-serif]">
-                    <div className="flex flex-col gap-[clamp(0.25rem,0.65vw,0.55rem)] rounded-[clamp(0.45rem,1vw,0.9rem)] bg-black/10 p-[clamp(0.4rem,1vw,0.85rem)] shadow-[inset_0_2px_5px_rgb(0_0_0_/_20%)]">
+                <div className="keyboard-deck w-[min(92vw,78rem)] rounded-[clamp(0.8rem,2vw,1.8rem)] border border-black/20 bg-[linear-gradient(145deg,#e3e5e4_0%,#bfc3c2_42%,#929796_100%)] p-[clamp(0.7rem,1.8vw,1.6rem)] shadow-[0_0.2rem_0_rgb(255_255_255_/_65%)_inset,0_-0.35rem_0.7rem_rgb(49_54_53_/_24%)_inset,0_1.2rem_1.4rem_rgb(34_40_39_/_18%),0_3rem_6rem_rgb(27_34_32_/_28%)] [font-family:'Archivo',sans-serif]">
+                    <div className="flex flex-col gap-[clamp(0.25rem,0.65vw,0.55rem)] rounded-[clamp(0.45rem,1vw,0.9rem)] border border-black/20 bg-[linear-gradient(180deg,#777c7a_0%,#555a58_100%)] p-[clamp(0.4rem,1vw,0.85rem)] shadow-[inset_0_0.3rem_0.65rem_rgb(0_0_0_/_38%),inset_0_-1px_0_rgb(255_255_255_/_14%),0_1px_0_rgb(255_255_255_/_55%)]">
                         {keyboardRows.map((row, rowIndex) => (
                             <div
                                 className="flex h-[clamp(1.55rem,4.5vw,3.8rem)] gap-[clamp(0.18rem,0.45vw,0.4rem)]"
@@ -246,9 +246,9 @@ function KeyboardSkillsScene({
                                     const isSkillKey = ['S', 'K', 'I', 'L'].includes(key.label);
                                     return (
                                         <button
-                                            className={`qwerty-key grid h-full min-w-0 cursor-pointer place-items-center rounded-[clamp(0.18rem,0.45vw,0.4rem)] border border-white/10 bg-[linear-gradient(145deg,#363938,#111312)] px-1 text-[clamp(0.62rem,1.35vw,1.15rem)] font-semibold text-white/90 shadow-[inset_0_1px_0_rgb(255_255_255_/_13%),0_0.2rem_0.25rem_rgb(0_0_0_/_35%)] transition-[transform,filter,box-shadow] duration-100 hover:-translate-y-0.5 active:translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-black ${
+                                            className={`qwerty-key grid h-full min-w-0 cursor-pointer place-items-center rounded-[clamp(0.2rem,0.48vw,0.44rem)] border border-black/75 bg-[linear-gradient(155deg,#484c4a_0%,#272a29_42%,#0e0f0f_100%)] px-1 text-[clamp(0.62rem,1.35vw,1.15rem)] font-semibold text-white/92 shadow-[inset_0_1px_0_rgb(255_255_255_/_20%),inset_0_-0.18rem_0_rgb(0_0_0_/_62%),0_0.18rem_0_#080909,0_0.38rem_0.55rem_rgb(0_0_0_/_42%)] transition-[transform,filter,box-shadow] duration-100 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-[0.16rem] active:shadow-[inset_0_2px_4px_rgb(0_0_0_/_55%),0_0.06rem_0_#080909] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-black ${
                                                 pressedKey === key.label
-                                                    ? 'translate-y-0.5 brightness-150 shadow-[inset_0_2px_4px_rgb(0_0_0_/_35%)]'
+                                                    ? 'translate-y-[0.16rem] brightness-125 shadow-[inset_0_2px_5px_rgb(0_0_0_/_58%),0_0.05rem_0_#080909]'
                                                     : ''
                                             }`}
                                             key={`${key.label}-${keyIndex}`}
@@ -268,7 +268,9 @@ function KeyboardSkillsScene({
                                                 ? 'Space'
                                                 : key.label}
                                         >
-                                            <span className={key.label.length > 2 ? 'text-[0.72em]' : ''}>
+                                            <span className={`drop-shadow-[0_1px_1px_rgb(0_0_0_/_85%)] ${
+                                                key.label.length > 2 ? 'text-[0.72em]' : ''
+                                            }`}>
                                                 {key.label === 'Space' ? '' : key.label}
                                             </span>
                                         </button>

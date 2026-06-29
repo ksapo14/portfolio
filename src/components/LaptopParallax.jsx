@@ -361,7 +361,7 @@ function LaptopParallax({ onSectionChange }) {
             />
             <div className="laptop-stage sticky top-0 grid h-svh place-items-center overflow-hidden">
                 <h1
-                    className="absolute right-0 bottom-[clamp(1.5rem,5vw,5rem)] left-0 z-[4] mx-auto h-max w-max select-none whitespace-nowrap text-center font-['Archivo',sans-serif] text-[clamp(4rem,13vw,12rem)] leading-[0.88] font-bold tracking-[-0.07em] text-black [-webkit-tap-highlight-color:transparent] [will-change:transform,opacity]"
+                    className="absolute right-0 bottom-[clamp(1.5rem,5vw,5rem)] left-0 z-[4] mx-auto h-max w-max select-none whitespace-nowrap text-center font-['Archivo',sans-serif] text-[clamp(3.5rem,11.5vw,10.5rem)] leading-[0.88] font-bold tracking-[-0.07em] text-black [-webkit-tap-highlight-color:transparent] [will-change:transform,opacity]"
                     aria-label={name}
                     ref={titleRef}
                 >
