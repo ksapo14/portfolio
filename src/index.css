@@ -1,53 +1,44 @@
-@import url('/src/assets/fonts/fonts.css');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap');
+@import 'tailwindcss';
 
 :root {
-  --ff: 'DM Sans', sans-serif;
-  --ff-secondary: 'Climate Crisis', sans-serif;
-
-  --txt: hsl(0, 0%, 95%);
-  --txt-secondary: hsl(0, 0%, 80%);
-
-  --accent: hsl(1, 100%, 69%);
-  --accent-shadow: hsla(1, 100%, 69%, 0.3);
-  --accent-secondary: hsl(145, 71%, 47%);
-
-  --shadow: 0 0 50px 0px hsla(0, 0%, 100%, 0.2);
-  --shadow-txt: 0 4px 0px hsla(0, 0%, 100%, 0.3);
+    font-family: 'Archivo', sans-serif;
+    color: #000;
+    background: #fff;
+    scrollbar-width: none;
 }
 
-html {
-  scrollbar-color: hsla(1, 100%, 69%, 0.78) hsl(0, 0%, 6%);
-  scrollbar-width: auto;
+* {
+    box-sizing: border-box;
 }
 
 ::-webkit-scrollbar {
-  width: 18px;
-}
-
-::-webkit-scrollbar-track {
-  border: 5px solid transparent;
-  background:
-    linear-gradient(to bottom, hsl(0, 0%, 6%), hsl(350, 20%, 9%), hsl(0, 0%, 6%)) content-box;
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb {
-  border: 5px solid transparent;
-  border-radius: 999px;
-  background:
-    linear-gradient(to bottom, hsla(1, 100%, 76%, 0.95), hsla(1, 100%, 58%, 0.86)) content-box;
-  min-height: 52px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(to bottom, hsl(1, 100%, 78%), hsl(1, 100%, 62%));
+    display: none;
 }
 
 body {
-  background-color: hsl(0, 0%, 5%);
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    -ms-overflow-style: none;
+}
+
+.is-loading {
+    overflow: hidden;
+}
+
+@keyframes phone-app-minimize {
+    0% {
+        border-radius: 0;
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    70% {
+        opacity: 0.72;
+    }
+
+    100% {
+        border-radius: 2rem;
+        opacity: 0;
+        transform: translate3d(0, 38%, 0) scale(0.16);
+    }
 }
