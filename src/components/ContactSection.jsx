@@ -374,7 +374,7 @@ function ContactSection({ onSectionChange }) {
 
     return (
         <section
-            className="relative h-[220vh] bg-[#dce5e1]"
+            className="relative h-[220vh] bg-[#dce5e1] max-md:h-[190svh]"
             id="contact"
             ref={sectionRef}
         >
@@ -392,7 +392,7 @@ function ContactSection({ onSectionChange }) {
                 </span>
 
                 <div
-                    className="contact-phone relative z-[1] aspect-[9/18.7] w-[min(82vw,42vh,23rem)] rounded-[clamp(2.1rem,3.6vw,3.2rem)] border-[clamp(0.46rem,0.78vw,0.66rem)] border-[#161817] bg-[#161817] p-[clamp(0.18rem,0.35vw,0.3rem)] shadow-[0_3rem_6rem_rgb(38_51_46_/_30%),inset_0_0_0_1px_rgb(255_255_255_/_12%)]"
+                    className="contact-phone relative z-[1] aspect-[9/18.7] w-[min(82vw,42vh,23rem)] rounded-[clamp(2.1rem,3.6vw,3.2rem)] border-[clamp(0.46rem,0.78vw,0.66rem)] border-[#161817] bg-[#161817] p-[clamp(0.18rem,0.35vw,0.3rem)] shadow-[0_3rem_6rem_rgb(38_51_46_/_30%),inset_0_0_0_1px_rgb(255_255_255_/_12%)] max-md:w-[min(88vw,44svh)]"
                     ref={phoneRef}
                 >
                     <div className="relative h-full overflow-hidden rounded-[clamp(1.75rem,3.2vw,2.7rem)] bg-[#f6f6f4]">
