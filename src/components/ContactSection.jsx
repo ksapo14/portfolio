@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+    AnimatePresence,
+    motion as Motion,
+    useReducedMotion,
+} from 'motion/react';
+import {
     BatteryFull,
     ChevronLeft,
     ExternalLink,
@@ -63,39 +68,69 @@ const launcherApps = [
 ];
 
 function PhoneStatusBar({ light = false }) {
+    const [time, setTime] = useState(() => new Date());
+
+    useEffect(() => {
+        let intervalId;
+        const now = new Date();
+        const millisecondsUntilNextMinute = (
+            (60 - now.getSeconds()) * 1000
+            - now.getMilliseconds()
+        );
+        const timeoutId = window.setTimeout(() => {
+            setTime(new Date());
+            intervalId = window.setInterval(() => {
+                setTime(new Date());
+            }, 60_000);
+        }, millisecondsUntilNextMinute);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+            if (intervalId !== undefined) {
+                window.clearInterval(intervalId);
+            }
+        };
+    }, []);
+
+    const timeParts = new Intl.DateTimeFormat([], {
+        hour: 'numeric',
+        minute: '2-digit',
+    }).formatToParts(time);
+    const hour = timeParts.find((part) => part.type === 'hour')?.value;
+    const minute = timeParts.find((part) => part.type === 'minute')?.value;
+
     return (
         <div
-            className={`pointer-events-none absolute top-[1.25%] right-[7%] left-[7%] z-[6] flex items-center justify-between text-[clamp(0.48rem,0.75vw,0.64rem)] font-semibold ${
+            className={`pointer-events-none absolute top-[1.4%] right-[7%] left-[7%] z-50 flex items-center justify-between text-[clamp(0.72rem,1.05vw,0.9rem)] font-bold tracking-[-0.025em] transition-colors duration-200 ${
                 light ? 'text-white' : 'text-black'
             }`}
             aria-hidden="true"
         >
-            <span>9:41</span>
-            <span className="flex items-center gap-[0.28rem]">
-                <span className="flex h-[0.55rem] items-end gap-[1px]">
+            <span className="drop-shadow-[0_1px_2px_rgb(0_0_0_/_18%)]">
+                {hour}:{minute}
+            </span>
+            <span className="flex items-center gap-[0.34rem] drop-shadow-[0_1px_2px_rgb(0_0_0_/_18%)]">
+                <span className="flex h-[0.68rem] items-end gap-[1.5px]">
                     {[35, 55, 75, 100].map((height) => (
                         <span
-                            className="w-[2px] rounded-full bg-current"
+                            className="w-[2.4px] rounded-full bg-current"
                             key={height}
                             style={{ height: `${height}%` }}
                         />
                     ))}
                 </span>
-                <Wifi className="w-[0.72rem]" strokeWidth={2.4} />
-                <BatteryFull className="w-[0.86rem]" strokeWidth={2.2} />
+                <Wifi className="w-[0.96rem]" strokeWidth={2.6} />
+                <BatteryFull className="w-[1.12rem]" strokeWidth={2.4} />
             </span>
         </div>
     );
 }
 
-function AppIcon({ app, className = '' }) {
+function AppGlyph({ app }) {
     const Icon = app.iconComponent;
 
     return (
-        <span
-            className={`relative grid aspect-square place-items-center overflow-hidden rounded-[22%] border border-white/30 shadow-[0_0.38rem_0.9rem_rgb(0_0_0_/_18%),inset_0_1px_0_rgb(255_255_255_/_24%)] ${className}`.trim()}
-            style={{ background: app.iconBackground }}
-        >
+        <>
             {app.fallbackText && (
                 <span
                     className="absolute inset-0 grid place-items-center text-[2.6em] leading-none font-bold tracking-[-0.08em] text-white [font-family:Arial,sans-serif]"
@@ -120,45 +155,66 @@ function AppIcon({ app, className = '' }) {
                     aria-hidden="true"
                 />
             )}
+        </>
+    );
+}
+
+function AppIcon({ app, className = '' }) {
+    return (
+        <span
+            className={`relative grid aspect-square place-items-center overflow-hidden rounded-[22%] border border-white/30 shadow-[0_0.38rem_0.9rem_rgb(0_0_0_/_18%),inset_0_1px_0_rgb(255_255_255_/_24%)] ${className}`.trim()}
+            style={{ background: app.iconBackground }}
+            data-app-icon
+        >
+            <AppGlyph app={app} />
         </span>
     );
 }
 
 function PhoneHome({ onOpenApp }) {
     return (
-        <div className="relative h-full overflow-hidden bg-[radial-gradient(circle_at_18%_14%,#a8d6ec_0,transparent_36%),radial-gradient(circle_at_82%_78%,#eec9dd_0,transparent_42%),linear-gradient(145deg,#e5edf1,#a8bac8)] px-[8%] pt-[14%] pb-[11%]">
-            <PhoneStatusBar />
+        <div
+            className="relative h-full overflow-hidden px-[8%] pt-[15%] pb-[11%]"
+            style={{
+                background: [
+                    'radial-gradient(circle at 12% 4%, #ffd85e 0%, #ff765c 23%, transparent 47%)',
+                    'radial-gradient(circle at 88% 22%, #ff4f9f 0%, #a842f4 32%, transparent 57%)',
+                    'radial-gradient(circle at 22% 88%, #18d6d1 0%, #1765e8 37%, transparent 62%)',
+                    'linear-gradient(145deg, #ff765c 0%, #8d42ef 48%, #1765e8 100%)',
+                ].join(','),
+            }}
+        >
             <div
-                className="pointer-events-none absolute -top-[8%] -right-[25%] size-[72%] rounded-full border-[2.8rem] border-white/18 blur-[1px]"
+                className="pointer-events-none absolute -top-[17%] -right-[39%] size-[96%] rotate-[-24deg] rounded-[46%] border-[clamp(2.8rem,8vw,5rem)] border-white/18 blur-[1px]"
                 aria-hidden="true"
             />
             <div
-                className="pointer-events-none absolute -bottom-[10%] -left-[28%] size-[68%] rounded-full border-[2.4rem] border-white/14"
+                className="pointer-events-none absolute top-[36%] -left-[48%] size-[105%] rotate-[28deg] rounded-[44%] border-[clamp(2.6rem,7vw,4.6rem)] border-cyan-100/16"
+                aria-hidden="true"
+            />
+            <div
+                className="pointer-events-none absolute -right-[32%] -bottom-[16%] size-[82%] rounded-full bg-fuchsia-300/25 blur-2xl"
                 aria-hidden="true"
             />
 
-            <div className="relative z-[1] mb-[11%] text-center text-black/72">
-                <p className="m-0 text-[clamp(0.58rem,0.9vw,0.76rem)] font-medium">
-                    Krish&apos;s Phone
-                </p>
-                <p className="m-0 mt-[1%] text-[clamp(1.55rem,3.2vw,2.6rem)] leading-none font-light tracking-[-0.055em]">
-                    9:41
-                </p>
-            </div>
-
-            <div className="relative z-[1] grid grid-cols-3 gap-x-[9%] gap-y-[8%]">
+            <div className="relative z-[1] grid grid-cols-3 gap-x-[9%] gap-y-[9%]">
                 {launcherApps.map((app) => (
                     <button
                         className="group flex min-w-0 flex-col items-center border-0 bg-transparent p-0"
                         key={app.id}
                         type="button"
-                        onClick={() => onOpenApp(app.id)}
+                        onClick={(event) => {
+                            onOpenApp(
+                                app.id,
+                                event.currentTarget.querySelector('[data-app-icon]'),
+                            );
+                        }}
                     >
                         <AppIcon
                             app={app}
                             className="w-full transition-transform duration-150 group-hover:-translate-y-0.5 group-active:scale-95"
                         />
-                        <span className="mt-[8%] max-w-full truncate text-[clamp(0.46rem,0.72vw,0.62rem)] font-medium text-black/74">
+                        <span className="mt-[9%] max-w-full truncate text-[clamp(0.68rem,1vw,0.84rem)] font-semibold text-white drop-shadow-[0_1px_3px_rgb(23_25_52_/_78%)]">
                             {app.name}
                         </span>
                     </button>
@@ -171,7 +227,6 @@ function PhoneHome({ onOpenApp }) {
 function SocialAppScreen({ app }) {
     return (
         <div className="flex h-full flex-col bg-[#f4f4f2] px-[8%] pt-[15%] pb-[11%]">
-            <PhoneStatusBar />
             <div className="flex items-center gap-[5%] border-b border-black/8 pb-[5%]">
                 <AppIcon
                     app={app}
@@ -222,7 +277,6 @@ function ContactDetailScreen({ type }) {
 
     return (
         <div className="flex h-full flex-col bg-[linear-gradient(180deg,#f8faf9,#e7ece9)] px-[8%] pt-[15%] pb-[11%]">
-            <PhoneStatusBar />
             <p className="m-0 text-center text-[clamp(0.62rem,0.95vw,0.8rem)] font-semibold text-black/44">
                 {isEmail ? 'Email' : 'Phone'}
             </p>
@@ -254,34 +308,44 @@ function ContactDetailScreen({ type }) {
 function ContactSection({ onSectionChange }) {
     const sectionRef = useRef(null);
     const phoneRef = useRef(null);
+    const screenRef = useRef(null);
     const headingRef = useRef(null);
-    const minimizeTimeoutRef = useRef(null);
+    const reduceAppMotion = useReducedMotion();
     const [activeApp, setActiveApp] = useState('home');
-    const [isMinimizing, setIsMinimizing] = useState(false);
+    const [statusApp, setStatusApp] = useState('home');
+    const [appOrigin, setAppOrigin] = useState({
+        top: 38,
+        left: 38,
+        width: 24,
+        height: 12,
+    });
 
-    const openApp = (appId) => {
-        setIsMinimizing(false);
+    const openApp = (appId, iconElement) => {
+        const screen = screenRef.current;
+
+        if (screen && iconElement) {
+            const screenBounds = screen.getBoundingClientRect();
+            const iconBounds = iconElement.getBoundingClientRect();
+
+            setAppOrigin({
+                top: ((iconBounds.top - screenBounds.top) / screenBounds.height) * 100,
+                left: ((iconBounds.left - screenBounds.left) / screenBounds.width) * 100,
+                width: (iconBounds.width / screenBounds.width) * 100,
+                height: (iconBounds.height / screenBounds.height) * 100,
+            });
+        }
+
+        setStatusApp(appId);
         setActiveApp(appId);
     };
 
     const returnHome = () => {
-        if (activeApp === 'home' || isMinimizing) {
+        if (activeApp === 'home') {
             return;
         }
 
-        setIsMinimizing(true);
-        minimizeTimeoutRef.current = window.setTimeout(() => {
-            setActiveApp('home');
-            setIsMinimizing(false);
-            minimizeTimeoutRef.current = null;
-        }, 280);
+        setActiveApp('home');
     };
-
-    useEffect(() => () => {
-        if (minimizeTimeoutRef.current !== null) {
-            window.clearTimeout(minimizeTimeoutRef.current);
-        }
-    }, []);
 
     useEffect(() => {
         const section = sectionRef.current;
@@ -314,16 +378,14 @@ function ContactSection({ onSectionChange }) {
             wasActive = isActive;
 
             if (reduceMotion || progress > 0.995) {
-                phone.style.opacity = '1';
                 phone.style.transform = 'none';
             } else {
                 const easedProgress = progress * progress * (3 - 2 * progress);
-                const translateY = (1 - easedProgress) * 90;
-                const rotationY = (1 - easedProgress) * -12;
-                const rotationZ = (1 - easedProgress) * -4;
-                const scale = 0.78 + easedProgress * 0.22;
+                const translateY = (1 - easedProgress) * 72;
+                const rotationY = (1 - easedProgress) * -18;
+                const rotationZ = (1 - easedProgress) * -5;
+                const scale = 0.2 + easedProgress * 0.8;
 
-                phone.style.opacity = String(easedProgress);
                 phone.style.transform = `translate3d(0, ${translateY}px, 0) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg) scale(${scale})`;
             }
             heading.style.opacity = String(1 - progress * 0.96);
@@ -336,7 +398,8 @@ function ContactSection({ onSectionChange }) {
             }
         };
 
-        phone.style.willChange = reduceMotion ? 'auto' : 'transform, opacity';
+        phone.style.opacity = '1';
+        phone.style.willChange = reduceMotion ? 'auto' : 'transform';
         updateContact();
         window.addEventListener('scroll', requestUpdate, { passive: true });
         window.addEventListener('resize', requestUpdate);
@@ -372,6 +435,24 @@ function ContactSection({ onSectionChange }) {
         window.location.href = `mailto:kcsapovadia@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
 
+    const collapsedAppShell = {
+        top: `${appOrigin.top}%`,
+        left: `${appOrigin.left}%`,
+        width: `${appOrigin.width}%`,
+        height: `${appOrigin.height}%`,
+        borderRadius: '22%',
+        opacity: 1,
+    };
+    const expandedAppShell = {
+        top: '0%',
+        left: '0%',
+        width: '100%',
+        height: '100%',
+        borderRadius: '0%',
+        opacity: 1,
+    };
+    const activeAppConfig = launcherApps.find((app) => app.id === activeApp);
+
     return (
         <section
             className="relative h-[220vh] bg-[#dce5e1] max-md:h-[190svh]"
@@ -395,22 +476,87 @@ function ContactSection({ onSectionChange }) {
                     className="contact-phone relative z-[1] aspect-[9/18.7] w-[min(82vw,42vh,23rem)] rounded-[clamp(2.1rem,3.6vw,3.2rem)] border-[clamp(0.46rem,0.78vw,0.66rem)] border-[#161817] bg-[#161817] p-[clamp(0.18rem,0.35vw,0.3rem)] shadow-[0_3rem_6rem_rgb(38_51_46_/_30%),inset_0_0_0_1px_rgb(255_255_255_/_12%)] max-md:w-[min(88vw,44svh)]"
                     ref={phoneRef}
                 >
-                    <div className="relative h-full overflow-hidden rounded-[clamp(1.75rem,3.2vw,2.7rem)] bg-[#f6f6f4]">
+                    <div
+                        className="relative h-full overflow-hidden rounded-[clamp(1.75rem,3.2vw,2.7rem)] bg-[#f6f6f4]"
+                        ref={screenRef}
+                    >
                         <div
                             className="absolute top-[1.1%] left-1/2 z-30 h-[3.2%] w-[31%] -translate-x-1/2 rounded-full bg-black"
                             aria-hidden="true"
                         />
+                        <PhoneStatusBar light={statusApp === 'home'} />
 
                         <PhoneHome onOpenApp={openApp} />
 
-                        {activeApp !== 'home' && (
-                            <div
-                                className={`absolute inset-0 z-10 overflow-hidden ${
-                                    isMinimizing
-                                        ? 'animate-[phone-app-minimize_280ms_cubic-bezier(0.4,0,1,1)_forwards]'
-                                        : ''
-                                }`}
+                        <AnimatePresence
+                            initial={false}
+                            onExitComplete={() => {
+                                if (activeApp === 'home') {
+                                    setStatusApp('home');
+                                }
+                            }}
+                        >
+                            {activeApp !== 'home' && (
+                            <Motion.div
+                                className="absolute z-10 overflow-hidden"
+                                key={activeApp}
+                                initial={reduceAppMotion
+                                    ? { ...expandedAppShell, opacity: 0 }
+                                    : collapsedAppShell}
+                                animate={expandedAppShell}
+                                exit={reduceAppMotion
+                                    ? { ...expandedAppShell, opacity: 0 }
+                                    : collapsedAppShell}
+                                transition={reduceAppMotion
+                                    ? { duration: 0.16, ease: 'easeOut' }
+                                    : {
+                                        duration: 0.48,
+                                        ease: [0.32, 0.72, 0, 1],
+                                    }}
+                                style={{ background: activeAppConfig?.iconBackground }}
                             >
+                                {activeAppConfig && (
+                                    <Motion.div
+                                        className="pointer-events-none absolute inset-0 z-[1] grid place-items-center overflow-hidden"
+                                        initial={{ opacity: reduceAppMotion ? 0 : 1 }}
+                                        animate={{
+                                            opacity: 0,
+                                            transition: {
+                                                duration: reduceAppMotion ? 0.08 : 0.14,
+                                            },
+                                        }}
+                                        exit={{
+                                            opacity: reduceAppMotion ? 0 : [0, 0, 1],
+                                            transition: reduceAppMotion
+                                                ? { duration: 0.08 }
+                                                : {
+                                                    duration: 0.48,
+                                                    times: [0, 0.64, 1],
+                                                    ease: [0.32, 0.72, 0, 1],
+                                                },
+                                        }}
+                                        aria-hidden="true"
+                                    >
+                                        <AppGlyph app={activeAppConfig} />
+                                    </Motion.div>
+                                )}
+                                <Motion.div
+                                    className="relative z-[2] h-full w-full"
+                                    initial={{ opacity: 0 }}
+                                    animate={{
+                                        opacity: 1,
+                                        transition: {
+                                            delay: reduceAppMotion ? 0 : 0.08,
+                                            duration: reduceAppMotion ? 0.12 : 0.2,
+                                        },
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        transition: {
+                                            duration: reduceAppMotion ? 0.08 : 0.14,
+                                        },
+                                    }}
+                                >
                                 {socialApps[activeApp] && (
                                     <SocialAppScreen app={socialApps[activeApp]} />
                                 )}
@@ -424,7 +570,6 @@ function ContactSection({ onSectionChange }) {
                                         className="flex h-full flex-col bg-[#f6f6f4]"
                                         onSubmit={handleSubmit}
                                     >
-                                        <PhoneStatusBar />
                             <div className="shrink-0 border-b border-black/8 bg-white/88 px-[6%] pt-[7.5%] pb-[3.5%] backdrop-blur-xl">
                                 <div className="mb-[3%] flex items-center justify-center">
                                     <span className="text-[clamp(0.52rem,0.8vw,0.7rem)] font-semibold text-black/45">
@@ -498,15 +643,16 @@ function ContactSection({ onSectionChange }) {
                             </div>
                                     </form>
                                 )}
-                            </div>
-                        )}
+                                </Motion.div>
+                            </Motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {activeApp !== 'home' && (
                             <button
                                 className="absolute top-[6.6%] left-[5.5%] z-40 grid aspect-square w-[9%] place-items-center rounded-full border-0 bg-white/68 text-black/70 shadow-[0_0.25rem_0.75rem_rgb(0_0_0_/_10%)] backdrop-blur-md transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                                 type="button"
                                 onClick={returnHome}
-                                disabled={isMinimizing}
                                 aria-label={`Close ${activeApp} and return home`}
                             >
                                 <ChevronLeft className="w-[58%]" strokeWidth={2.3} />

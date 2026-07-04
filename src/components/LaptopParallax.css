@@ -24,9 +24,8 @@
 }
 
 .laptop.is-entered {
-    transform: none !important;
     transform-style: flat;
-    will-change: auto;
+    will-change: transform;
 }
 
 .laptop.is-entered .laptop-lid,

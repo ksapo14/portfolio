@@ -126,7 +126,7 @@ function LaptopParallax({ onSectionChange }) {
                     const time = this.time();
                     laptop.classList.toggle(
                         'is-entered',
-                        time >= 0.999 && time < 1.72,
+                        time >= 0.999,
                     );
                 },
                 scrollTrigger: {
@@ -203,9 +203,8 @@ function LaptopParallax({ onSectionChange }) {
                     duration: 0.22,
                     ease: 'power2.out',
                 }, 1.28)
-                .to(projectsPage, {
-                    autoAlpha: 0,
-                    yPercent: -100,
+                .to(laptop, {
+                    y: () => -window.innerHeight,
                     duration: 0.56,
                     ease: 'none',
                     force3D: false,

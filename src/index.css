@@ -26,24 +26,6 @@ body {
     overflow: hidden;
 }
 
-@keyframes phone-app-minimize {
-    0% {
-        border-radius: 0;
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-
-    70% {
-        opacity: 0.72;
-    }
-
-    100% {
-        border-radius: 2rem;
-        opacity: 0;
-        transform: translate3d(0, 38%, 0) scale(0.16);
-    }
-}
-
 @keyframes mobile-skill-blocks {
     0% {
         opacity: 0;
