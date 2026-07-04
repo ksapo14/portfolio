@@ -459,7 +459,7 @@ function ContactSection({ onSectionChange }) {
             id="contact"
             ref={sectionRef}
         >
-            <div className="sticky top-0 grid h-svh place-items-center overflow-hidden px-4 [perspective:1600px]">
+            <div className="sticky top-0 grid h-dvh min-h-svh place-items-center overflow-hidden px-4 [perspective:1600px]">
                 <div
                     className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgb(255_255_255_/_95%),transparent_48%),linear-gradient(180deg,#edf2ef,#ccd9d4)]"
                     aria-hidden="true"
@@ -473,7 +473,7 @@ function ContactSection({ onSectionChange }) {
                 </span>
 
                 <div
-                    className="contact-phone relative z-[1] aspect-[9/18.7] w-[min(82vw,42vh,23rem)] rounded-[clamp(2.1rem,3.6vw,3.2rem)] border-[clamp(0.46rem,0.78vw,0.66rem)] border-[#161817] bg-[#161817] p-[clamp(0.18rem,0.35vw,0.3rem)] shadow-[0_3rem_6rem_rgb(38_51_46_/_30%),inset_0_0_0_1px_rgb(255_255_255_/_12%)] max-md:w-[min(88vw,44svh)]"
+                    className="contact-phone relative z-[1] aspect-[9/18.7] w-[min(82vw,42vh,23rem)] rounded-[clamp(2.1rem,3.6vw,3.2rem)] border-[clamp(0.46rem,0.78vw,0.66rem)] border-[#161817] bg-[#161817] p-[clamp(0.18rem,0.35vw,0.3rem)] shadow-[0_3rem_6rem_rgb(38_51_46_/_30%),inset_0_0_0_1px_rgb(255_255_255_/_12%)] max-md:w-[min(86vw,41svh)]"
                     ref={phoneRef}
                 >
                     <div

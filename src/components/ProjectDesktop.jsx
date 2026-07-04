@@ -353,34 +353,162 @@ function ProjectDesktop() {
             >
                 <defs>
                     <linearGradient id="desktop-sky" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stopColor="#f8faf9" />
-                        <stop offset="1" stopColor="#dfe8e8" />
+                        <stop offset="0" stopColor="#17245f" />
+                        <stop offset="0.42" stopColor="#6754ad" />
+                        <stop offset="0.73" stopColor="#dc799d" />
+                        <stop offset="1" stopColor="#f5bd88" />
                     </linearGradient>
+                    <radialGradient id="desktop-sun-glow" cx="0.78" cy="0.2" r="0.52">
+                        <stop offset="0" stopColor="#ffe8b2" stopOpacity="0.95" />
+                        <stop offset="0.18" stopColor="#ffb787" stopOpacity="0.62" />
+                        <stop offset="0.54" stopColor="#e66ba2" stopOpacity="0.16" />
+                        <stop offset="1" stopColor="#6e4faf" stopOpacity="0" />
+                    </radialGradient>
                     <linearGradient id="mountain-back" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stopColor="#b8c9ca" stopOpacity="0.28" />
-                        <stop offset="1" stopColor="#8fa5a8" stopOpacity="0.12" />
+                        <stop offset="0" stopColor="#b989d4" />
+                        <stop offset="0.5" stopColor="#8f72c3" />
+                        <stop offset="1" stopColor="#5b69a9" />
+                    </linearGradient>
+                    <linearGradient id="mountain-mid" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stopColor="#315fa4" />
+                        <stop offset="0.52" stopColor="#476f9f" />
+                        <stop offset="1" stopColor="#3a8b91" />
                     </linearGradient>
                     <linearGradient id="mountain-front" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0" stopColor="#9caeb0" stopOpacity="0.2" />
-                        <stop offset="1" stopColor="#c6d1d1" stopOpacity="0.32" />
+                        <stop offset="0" stopColor="#123653" />
+                        <stop offset="0.55" stopColor="#185669" />
+                        <stop offset="1" stopColor="#287768" />
                     </linearGradient>
+                    <linearGradient id="mountain-snow" x1="0" y1="0" x2="0.8" y2="1">
+                        <stop offset="0" stopColor="#fff6f1" stopOpacity="0.94" />
+                        <stop offset="1" stopColor="#d9c9e8" stopOpacity="0.38" />
+                    </linearGradient>
+                    <linearGradient id="desktop-haze" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0" stopColor="#e6a3c1" stopOpacity="0.1" />
+                        <stop offset="0.5" stopColor="#ffd3b0" stopOpacity="0.38" />
+                        <stop offset="1" stopColor="#b58ed1" stopOpacity="0.08" />
+                    </linearGradient>
+                    <filter
+                        id="desktop-mountain-texture"
+                        x="-8%"
+                        y="-8%"
+                        width="116%"
+                        height="116%"
+                        colorInterpolationFilters="sRGB"
+                    >
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.018 0.055"
+                            numOctaves="3"
+                            seed="12"
+                            result="mountainNoise"
+                        />
+                        <feColorMatrix
+                            in="mountainNoise"
+                            type="matrix"
+                            values="0.7 0 0 0 0.12
+                                    0 0.7 0 0 0.1
+                                    0 0 0.7 0 0.16
+                                    0 0 0 0.24 0"
+                            result="coloredNoise"
+                        />
+                        <feBlend
+                            in="SourceGraphic"
+                            in2="coloredNoise"
+                            mode="soft-light"
+                        />
+                    </filter>
+                    <filter id="desktop-fine-grain" x="0" y="0" width="100%" height="100%">
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.72"
+                            numOctaves="3"
+                            seed="4"
+                            stitchTiles="stitch"
+                        />
+                        <feColorMatrix type="saturate" values="0" />
+                        <feComponentTransfer>
+                            <feFuncA type="table" tableValues="0 0.16" />
+                        </feComponentTransfer>
+                    </filter>
+                    <filter id="desktop-haze-blur" x="-10%" y="-50%" width="120%" height="200%">
+                        <feGaussianBlur stdDeviation="20" />
+                    </filter>
+                    <clipPath id="desktop-wallpaper-clip">
+                        <rect width="1200" height="750" />
+                    </clipPath>
                 </defs>
-                <rect width="1200" height="750" fill="url(#desktop-sky)" />
-                <path
-                    d="M0 550 165 360l80 95 150-250 170 245 120-145 175 235 118-135 222 180v165H0Z"
-                    fill="url(#mountain-back)"
-                />
-                <path
-                    d="M0 620 215 425l115 125 145-180 170 205 165-170 155 165 95-75 140 115v140H0Z"
-                    fill="url(#mountain-front)"
-                />
+                <g clipPath="url(#desktop-wallpaper-clip)">
+                    <rect width="1200" height="750" fill="url(#desktop-sky)" />
+                    <rect width="1200" height="750" fill="url(#desktop-sun-glow)" />
+                    <circle cx="935" cy="162" r="58" fill="#ffe1a3" opacity="0.72" />
+
+                    <path
+                        d="M-80 398C120 330 228 376 388 330S708 254 868 306s282 30 430-42"
+                        fill="none"
+                        stroke="url(#desktop-haze)"
+                        strokeWidth="58"
+                        filter="url(#desktop-haze-blur)"
+                        opacity="0.62"
+                    />
+
+                    <g filter="url(#desktop-mountain-texture)">
+                        <path
+                            d="M-40 578 158 365l84 96 153-256 174 247 118-148 178 237 116-138 259 204v143H-40Z"
+                            fill="url(#mountain-back)"
+                        />
+                        <path
+                            d="m302 360 93-155 100 142-51-36-48 34-35-48Z"
+                            fill="url(#mountain-snow)"
+                        />
+                        <path
+                            d="m616 393 71-89 82 110-45-29-38 25-29-37Z"
+                            fill="url(#mountain-snow)"
+                            opacity="0.74"
+                        />
+                        <path
+                            d="M-55 650 210 418l118 132 148-185 173 209 163-174 156 170 98-80 174 142v118H-55Z"
+                            fill="url(#mountain-mid)"
+                        />
+                        <path
+                            d="m407 451 69-86 81 98-43-28-37 27-27-34Z"
+                            fill="url(#mountain-snow)"
+                            opacity="0.86"
+                        />
+                        <path
+                            d="M-45 702 174 524l129 103 171-141 165 144 183-116 156 103 109-70 153 105v98H-45Z"
+                            fill="url(#mountain-front)"
+                        />
+                    </g>
+
+                    <path
+                        d="M0 604c153-36 283-25 421 6 144 32 296 31 438-5 121-31 224-30 341-5v85H0Z"
+                        fill="url(#desktop-haze)"
+                        opacity="0.34"
+                    />
+                    <rect
+                        width="1200"
+                        height="750"
+                        filter="url(#desktop-fine-grain)"
+                        opacity="0.24"
+                        style={{ mixBlendMode: 'soft-light' }}
+                    />
+                    <rect
+                        width="1200"
+                        height="750"
+                        fill="none"
+                        stroke="#fff"
+                        strokeOpacity="0.08"
+                        strokeWidth="2"
+                    />
+                </g>
             </svg>
 
             <div
                 className="pointer-events-none absolute inset-0 grid place-items-center pb-[8%]"
                 aria-hidden="true"
             >
-                <span className="text-[clamp(3rem,12vw,11rem)] leading-none font-bold tracking-[-0.075em] text-[#34484b]/[0.075] uppercase">
+                <span className="text-[clamp(3rem,12vw,11rem)] leading-none font-bold tracking-[-0.075em] text-white/10 uppercase drop-shadow-[0_2px_12px_rgb(27_28_68_/_22%)]">
                     Projects
                 </span>
             </div>

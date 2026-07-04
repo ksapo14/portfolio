@@ -301,7 +301,7 @@ function MobilePhoneParallax({ onSectionChange }) {
             <span className="absolute top-[49%]" id="work" aria-hidden="true" />
             <span className="absolute top-[78%]" id="skills" aria-hidden="true" />
 
-            <div className="sticky top-0 grid h-svh place-items-center overflow-hidden px-3 pt-[max(4.5rem,env(safe-area-inset-top))] pb-10 [perspective:1200px]">
+            <div className="sticky top-0 grid h-dvh min-h-svh place-items-center overflow-hidden px-3 pt-[max(4.5rem,env(safe-area-inset-top))] pb-10 [perspective:1200px]">
                 <h1
                     className="absolute right-0 bottom-[4.25rem] left-0 m-0 whitespace-nowrap text-center font-['Archivo',sans-serif] text-[clamp(2.4rem,11.5vw,3.4rem)] leading-none font-bold tracking-[-0.075em]"
                     ref={titleRef}
@@ -310,7 +310,7 @@ function MobilePhoneParallax({ onSectionChange }) {
                 </h1>
 
                 <div
-                    className="relative z-[2] aspect-[9/18.7] w-[min(84vw,42svh,22rem)] rounded-[2.65rem] border-[0.55rem] border-[#151716] bg-[#151716] p-[0.18rem] shadow-[0_2.5rem_5rem_rgb(0_0_0_/_28%)]"
+                    className="relative z-[2] aspect-[9/18.7] w-[min(82vw,40svh,21rem)] rounded-[2.65rem] border-[0.55rem] border-[#151716] bg-[#151716] p-[0.18rem] shadow-[0_2.5rem_5rem_rgb(0_0_0_/_28%)]"
                     ref={phoneRef}
                 >
                     <div className="relative h-full overflow-hidden rounded-[2rem] bg-[#f8f8f5]">
@@ -325,8 +325,8 @@ function MobilePhoneParallax({ onSectionChange }) {
                                 <span>2026</span>
                             </div>
                             <h2 className="m-0 text-[2.3rem] leading-[0.9] font-bold tracking-[-0.065em]">
-                                AI/ML &amp;
-                                <span className="block font-medium">Software Engineer</span>
+                                Aspiring AI/ML
+                                <span className="block font-medium">&amp; Software Engineer</span>
                             </h2>
                             <p className="m-0 text-[0.58rem] font-semibold tracking-[0.1em] uppercase">
                                 Scroll to explore
