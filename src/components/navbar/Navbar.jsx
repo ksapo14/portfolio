@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import SocialLinks from '../SocialLinks';
 
 const navItems = [
     { label: 'Work', href: '#work' },
@@ -43,9 +44,7 @@ function Navbar({ activeSection = 'home' }) {
                 })}
             </nav>
 
-            <a className="header-email" href="mailto:kcsapovadia@gmail.com">
-                Email me
-            </a>
+            <SocialLinks className="header-socials" />
 
             <button
                 className="menu-toggle"
