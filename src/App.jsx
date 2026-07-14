@@ -12,6 +12,7 @@ import heroWorkbench from './assets/hero-workbench.jpg';
 import kairsPreview from './assets/images/kairs.png';
 import krishImage from './assets/krish.jpg';
 import Footer from './components/Footer';
+import LoadingScreen from './components/LoadingScreen';
 import Navbar from './components/navbar/Navbar';
 
 const projects = [
@@ -84,6 +85,8 @@ function Reveal({ children, className = '', delay = 0 }) {
 
 function App() {
     const [activeSection, setActiveSection] = useState('home');
+    const [introComplete, setIntroComplete] = useState(false);
+    const [introVisible, setIntroVisible] = useState(true);
     const reduceMotion = useReducedMotion();
     const { scrollYProgress } = useScroll();
     const progress = useSpring(scrollYProgress, {
@@ -131,6 +134,12 @@ function App() {
                 wheelMultiplier: 0.95,
             }}
         >
+            {introVisible && (
+                <LoadingScreen
+                    onReveal={() => setIntroComplete(true)}
+                    onComplete={() => setIntroVisible(false)}
+                />
+            )}
             <a className="skip-link" href="#main-content">
                 Skip to content
             </a>
@@ -141,7 +150,7 @@ function App() {
             />
             <Navbar activeSection={activeSection} />
 
-            <main id="main-content">
+            <main id="main-content" aria-busy={!introComplete}>
                 <section
                     className="hero section-shell"
                     id="home"
@@ -152,16 +161,24 @@ function App() {
                         <div className="hero-intro">
                             <Motion.p
                                 className="eyebrow hero-eyebrow"
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={false}
+                                animate={
+                                    introComplete || reduceMotion
+                                        ? { opacity: 1, y: 0 }
+                                        : { opacity: 0, y: 12 }
+                                }
                                 transition={{ duration: 0.5, delay: 0.08 }}
                             >
                                 Software + ML engineer
                             </Motion.p>
                             <Motion.h1
                                 id="hero-title"
-                                initial={{ opacity: 0, y: 34 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={false}
+                                animate={
+                                    introComplete || reduceMotion
+                                        ? { opacity: 1, y: 0 }
+                                        : { opacity: 0, y: 34 }
+                                }
                                 transition={{
                                     duration: 0.85,
                                     delay: 0.14,
@@ -175,8 +192,12 @@ function App() {
 
                         <Motion.div
                             className="hero-art-wrap"
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            animate={{ opacity: 1, scale: 1 }}
+                            initial={false}
+                            animate={
+                                introComplete || reduceMotion
+                                    ? { opacity: 1, scale: 1, y: 0 }
+                                    : { opacity: 0, scale: 0.94, y: 28 }
+                            }
                             transition={{
                                 duration: 0.85,
                                 delay: 0.28,
@@ -196,8 +217,12 @@ function App() {
 
                         <Motion.div
                             className="hero-summary"
-                            initial={{ opacity: 0, y: 18 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            initial={false}
+                            animate={
+                                introComplete || reduceMotion
+                                    ? { opacity: 1, y: 0 }
+                                    : { opacity: 0, y: 18 }
+                            }
                             transition={{ duration: 0.65, delay: 0.45 }}
                         >
                             <p>
