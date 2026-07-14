@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowDown, ArrowUpRight, Mail, MapPin } from 'lucide-react';
+import { ReactLenis } from 'lenis/react';
 import {
     motion as Motion,
     useReducedMotion,
@@ -83,6 +84,7 @@ function Reveal({ children, className = '', delay = 0 }) {
 
 function App() {
     const [activeSection, setActiveSection] = useState('home');
+    const reduceMotion = useReducedMotion();
     const { scrollYProgress } = useScroll();
     const progress = useSpring(scrollYProgress, {
         stiffness: 140,
@@ -113,7 +115,22 @@ function App() {
     }, []);
 
     return (
-        <>
+        <ReactLenis
+            root
+            options={{
+                anchors: {
+                    offset: -96,
+                    duration: reduceMotion ? 0 : 1.25,
+                },
+                autoRaf: true,
+                duration: 1.45,
+                easing: (time) => 1 - Math.pow(1 - time, 4),
+                smoothWheel: !reduceMotion,
+                syncTouch: false,
+                touchMultiplier: 1.15,
+                wheelMultiplier: 0.95,
+            }}
+        >
             <a className="skip-link" href="#main-content">
                 Skip to content
             </a>
@@ -371,7 +388,7 @@ function App() {
             </main>
 
             <Footer />
-        </>
+        </ReactLenis>
     );
 }
 
