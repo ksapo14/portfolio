@@ -1,99 +1,155 @@
-import { useEffect, useState } from 'react';
-import { ArrowDown, ArrowUpRight, Mail, MapPin } from 'lucide-react';
-import { ReactLenis } from 'lenis/react';
+import { useEffect, useRef, useState } from 'react';
+import { useGSAP } from '@gsap/react';
 import {
-    motion as Motion,
-    useReducedMotion,
-    useScroll,
-    useSpring,
-} from 'motion/react';
-import artisanalPreview from './assets/artisanal_restraunt-optimized.jpg';
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight,
+    ArrowUpRight,
+    Mail,
+    MapPin,
+} from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ReactLenis } from 'lenis/react';
+import artisanalPreview from './assets/artisanal_restraunt_updated.png';
+import curiousIdeasImage from './assets/generated/curious-ideas.webp';
+import krishCutout from './assets/generated/krish-cutout.webp';
+import principleClarity from './assets/generated/principle-clarity.webp';
+import principleFinish from './assets/generated/principle-finish.webp';
+import principleUseful from './assets/generated/principle-useful.webp';
 import heroWorkbench from './assets/hero-workbench.jpg';
+import imagineerPreview from './assets/imagineer.png';
 import kairsPreview from './assets/images/kairs.png';
-import krishImage from './assets/krish.jpg';
 import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
 import Navbar from './components/navbar/Navbar';
+import './app.css';
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const projects = [
     {
         name: 'Artisanal',
-        number: '01',
-        description: 'A cinematic restaurant website built around atmosphere, clear navigation, and an editorial sense of pace.',
-        details: ['Web design', 'Frontend development', '2026'],
+        description:
+            'A cinematic restaurant experience shaped around appetite, atmosphere, and an editorial sense of pace.',
+        services: ['Direction', 'UI design', 'Frontend'],
         image: artisanalPreview,
         imageAlt: 'Artisanal restaurant website homepage',
         url: 'https://artisanal-restraunt.vercel.app/',
-        theme: 'warm',
+        theme: 'terracotta',
+        year: '2026',
     },
     {
         name: 'KAIRS',
-        number: '02',
-        description: 'A clean product website that introduces a wearable knee-support concept with direct, accessible storytelling.',
-        details: ['Product website', 'Responsive UI', '2026'],
+        description:
+            'A focused product story for a wearable knee-support concept, built to make complex health technology feel clear.',
+        services: ['Product story', 'Responsive UI', 'Development'],
         image: kairsPreview,
         imageAlt: 'KAIRS product website homepage',
         url: 'https://www.kairs.ai/',
-        theme: 'cool',
+        theme: 'mineral',
+        year: '2026',
+    },
+    {
+        name: 'Imagineer',
+        description:
+            'A live classroom assistant that listens to discussion and turns spoken ideas into visual explanations as they unfold.',
+        services: ['Product concept', 'AI experience', 'Frontend'],
+        image: imagineerPreview,
+        imageAlt: 'Imagineer AI classroom assistant homepage',
+        url: 'https://imaginev1.kcsapovadia.chatgpt.site/',
+        theme: 'lime',
+        year: '2026',
     },
 ];
 
 const capabilities = [
     {
-        number: '01',
         title: 'Product interfaces',
-        body: 'Responsive React experiences with a strong focus on hierarchy, interaction, and usability.',
+        body: 'Responsive React experiences with deliberate hierarchy, interaction, and accessibility.',
+        detail: 'React / JavaScript / TypeScript',
+        className: 'capability-product',
     },
     {
-        number: '02',
         title: 'Software systems',
-        body: 'Python backends, REST APIs, SQL, and practical system design for useful products.',
+        body: 'Practical backends, APIs, and data layers designed to stay understandable as they grow.',
+        detail: 'Python / FastAPI / Django / SQL',
+        className: 'capability-systems',
     },
     {
-        number: '03',
         title: 'Machine learning',
-        body: 'Model experimentation and AI workflows using Python, PyTorch, and data-driven iteration.',
+        body: 'Model experiments and AI workflows grounded in iteration, evaluation, and useful outcomes.',
+        detail: 'PyTorch / Python',
+        className: 'capability-ml',
+    },
+    {
+        title: 'From idea to shipped',
+        body: 'I move between product thinking and implementation, helping small teams turn rough concepts into coherent, working experiences.',
+        detail: 'Design thinking / Git / Docker',
+        className: 'capability-shipped',
     },
 ];
 
-const toolGroups = [
-    ['Languages', 'JavaScript, TypeScript, Python, C / C++, SQL'],
-    ['Frontend', 'React, HTML, CSS, Tailwind CSS'],
-    ['Backend', 'FastAPI, Django, REST APIs, Docker'],
-    ['ML + tools', 'PyTorch, Git, AI workflows, embedded systems'],
+const toolkit = [
+    'React',
+    'TypeScript',
+    'Python',
+    'FastAPI',
+    'PyTorch',
+    'Django',
+    'SQL',
+    'Docker',
+    'GSAP',
+    'Tailwind CSS',
+    'C / C++',
+    'Git',
 ];
 
-function Reveal({ children, className = '', delay = 0 }) {
-    const reduceMotion = useReducedMotion();
+const principles = [
+    {
+        title: 'Clarity earns attention.',
+        body: 'The best interface is not the loudest one. I reduce an idea to the few decisions that help someone understand it, trust it, and move.',
+        focus: 'Hierarchy, language, interaction',
+    },
+    {
+        title: 'Useful beats impressive.',
+        body: 'Technical ambition matters most when it solves a real problem. I look for the smallest dependable system that can create a meaningful result.',
+        focus: 'Systems thinking, iteration, outcomes',
+    },
+    {
+        title: 'Curiosity needs a finish line.',
+        body: 'Experimentation is part of my process, but shipping is the goal. I test ideas quickly, learn from the result, and keep the final experience focused.',
+        focus: 'Prototyping, feedback, delivery',
+    },
+];
 
-    return (
-        <Motion.div
-            className={className}
-            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.18 }}
-            transition={{
-                duration: 0.72,
-                delay,
-                ease: [0.22, 1, 0.36, 1],
-            }}
-        >
-            {children}
-        </Motion.div>
+function usePrefersReducedMotion() {
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     );
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia(
+            '(prefers-reduced-motion: reduce)',
+        );
+        const updatePreference = (event) => {
+            setPrefersReducedMotion(event.matches);
+        };
+
+        mediaQuery.addEventListener('change', updatePreference);
+        return () => mediaQuery.removeEventListener('change', updatePreference);
+    }, []);
+
+    return prefersReducedMotion;
 }
 
 function App() {
+    const siteRef = useRef(null);
     const [activeSection, setActiveSection] = useState('home');
     const [introComplete, setIntroComplete] = useState(false);
     const [introVisible, setIntroVisible] = useState(true);
-    const reduceMotion = useReducedMotion();
-    const { scrollYProgress } = useScroll();
-    const progress = useSpring(scrollYProgress, {
-        stiffness: 140,
-        damping: 28,
-        mass: 0.35,
-    });
+    const [principleIndex, setPrincipleIndex] = useState(0);
+    const reduceMotion = usePrefersReducedMotion();
 
     useEffect(() => {
         const sections = [...document.querySelectorAll('[data-section]')];
@@ -108,8 +164,8 @@ function App() {
                 }
             },
             {
-                rootMargin: '-30% 0px -55%',
-                threshold: [0, 0.2, 0.5, 0.8],
+                rootMargin: '-32% 0px -54%',
+                threshold: [0, 0.25, 0.55, 0.8],
             },
         );
 
@@ -117,302 +173,547 @@ function App() {
         return () => observer.disconnect();
     }, []);
 
+    useGSAP(
+        () => {
+            if (!introComplete && !reduceMotion) {
+                return;
+            }
+
+            const scrollProgress = gsap.to('.scroll-progress', {
+                scaleX: 1,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: document.documentElement,
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 0.15,
+                },
+            });
+
+            if (reduceMotion) {
+                gsap.set(
+                    [
+                        '.site-header',
+                        '.hero-kicker',
+                        '.hero-line',
+                        '.hero-lede',
+                        '.hero-actions',
+                        '.hero-context',
+                    ],
+                    { clearProps: 'all' },
+                );
+                return () => scrollProgress.kill();
+            }
+
+            const introTimeline = gsap.timeline({
+                defaults: { ease: 'power4.out' },
+            });
+
+            introTimeline
+                .fromTo(
+                    '.site-header',
+                    { autoAlpha: 0, y: -28 },
+                    { autoAlpha: 1, y: 0, duration: 0.7 },
+                )
+                .fromTo(
+                    '.hero-kicker',
+                    { autoAlpha: 0, y: 16 },
+                    { autoAlpha: 1, y: 0, duration: 0.55 },
+                    0.08,
+                )
+                .fromTo(
+                    '.hero-line',
+                    { yPercent: 112 },
+                    {
+                        yPercent: 0,
+                        duration: 1.05,
+                        stagger: 0.1,
+                    },
+                    0.12,
+                )
+                .fromTo(
+                    ['.hero-lede', '.hero-actions', '.hero-context'],
+                    { autoAlpha: 0, y: 24 },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.75,
+                        stagger: 0.08,
+                    },
+                    0.38,
+                )
+                .fromTo(
+                    '.hero-media img',
+                    { scale: 1.12 },
+                    { scale: 1, duration: 1.6 },
+                    0,
+                );
+
+            gsap.utils.toArray('.reveal-item').forEach((item) => {
+                gsap.fromTo(
+                    item,
+                    { autoAlpha: 0, y: 54 },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.9,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: item,
+                            start: 'top 86%',
+                            once: true,
+                        },
+                    },
+                );
+            });
+
+            const projectCards = gsap.utils.toArray('.project-card');
+
+            projectCards.forEach((card, index) => {
+                gsap.set(card, { zIndex: index + 1 });
+
+                gsap.fromTo(
+                    card,
+                    {
+                        autoAlpha: 0,
+                        scale: 0.94,
+                        y: 96,
+                    },
+                    {
+                        autoAlpha: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: 'power3.out',
+                        overwrite: 'auto',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 88%',
+                            once: true,
+                        },
+                    },
+                );
+            });
+
+            gsap.fromTo(
+                '.about-inline-image img',
+                { scale: 1.25, yPercent: -10 },
+                {
+                    scale: 1,
+                    yPercent: 10,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '.about-heading',
+                        start: 'top 88%',
+                        end: 'bottom 25%',
+                        scrub: 0.8,
+                    },
+                },
+            );
+
+            return () => {
+                introTimeline.kill();
+                scrollProgress.kill();
+            };
+        },
+        {
+            dependencies: [introComplete, reduceMotion],
+            revertOnUpdate: true,
+            scope: siteRef,
+        },
+    );
+
+    const changePrinciple = (direction) => {
+        setPrincipleIndex(
+            (current) =>
+                (current + direction + principles.length) % principles.length,
+        );
+    };
+
+    const activePrinciple = principles[principleIndex];
+
     return (
         <ReactLenis
             root
             options={{
                 anchors: {
-                    offset: -96,
-                    duration: reduceMotion ? 0 : 1.25,
+                    offset: -88,
+                    duration: reduceMotion ? 0 : 1.2,
                 },
                 autoRaf: true,
-                duration: 1.45,
+                duration: 1.25,
                 easing: (time) => 1 - Math.pow(1 - time, 4),
                 smoothWheel: !reduceMotion,
                 syncTouch: false,
-                touchMultiplier: 1.15,
-                wheelMultiplier: 0.95,
+                touchMultiplier: 1.1,
+                wheelMultiplier: 0.92,
             }}
         >
-            {introVisible && (
-                <LoadingScreen
-                    onReveal={() => setIntroComplete(true)}
-                    onComplete={() => setIntroVisible(false)}
-                />
-            )}
-            <a className="skip-link" href="#main-content">
-                Skip to content
-            </a>
-            <Motion.div
-                className="scroll-progress"
-                style={{ scaleX: progress }}
-                aria-hidden="true"
-            />
-            <Navbar activeSection={activeSection} />
+            <div className="site" ref={siteRef}>
+                {introVisible && (
+                    <LoadingScreen
+                        onReveal={() => setIntroComplete(true)}
+                        onComplete={() => setIntroVisible(false)}
+                    />
+                )}
 
-            <main id="main-content" aria-busy={!introComplete}>
-                <section
-                    className="hero section-shell"
-                    id="home"
-                    data-section
-                    aria-labelledby="hero-title"
+                <a className="skip-link" href="#main-content">
+                    Skip to content
+                </a>
+
+                <div className="scroll-progress" aria-hidden="true" />
+                <Navbar activeSection={activeSection} />
+
+                <main
+                    className="site-main overflow-x-hidden w-full max-w-full"
+                    id="main-content"
+                    aria-busy={!introComplete}
                 >
-                    <div className="hero-grid">
-                        <div className="hero-intro">
-                            <Motion.p
-                                className="eyebrow hero-eyebrow"
-                                initial={false}
-                                animate={
-                                    introComplete || reduceMotion
-                                        ? { opacity: 1, y: 0 }
-                                        : { opacity: 0, y: 12 }
-                                }
-                                transition={{ duration: 0.5, delay: 0.08 }}
-                            >
-                                Software + ML engineer
-                            </Motion.p>
-                            <Motion.h1
-                                id="hero-title"
-                                initial={false}
-                                animate={
-                                    introComplete || reduceMotion
-                                        ? { opacity: 1, y: 0 }
-                                        : { opacity: 0, y: 34 }
-                                }
-                                transition={{
-                                    duration: 0.85,
-                                    delay: 0.14,
-                                    ease: [0.22, 1, 0.36, 1],
-                                }}
-                            >
-                                I build useful
-                                <span>digital products.</span>
-                            </Motion.h1>
+                    <section
+                        className="hero"
+                        id="home"
+                        data-section
+                        aria-labelledby="hero-title"
+                    >
+                        <div className="hero-media" aria-hidden="true">
+                            <img src={heroWorkbench} alt="" />
                         </div>
+                        <div className="hero-wash" aria-hidden="true" />
 
-                        <Motion.div
-                            className="hero-art-wrap"
-                            initial={false}
-                            animate={
-                                introComplete || reduceMotion
-                                    ? { opacity: 1, scale: 1, y: 0 }
-                                    : { opacity: 0, scale: 0.94, y: 28 }
-                            }
-                            transition={{
-                                duration: 0.85,
-                                delay: 0.28,
-                                ease: [0.22, 1, 0.36, 1],
-                            }}
-                        >
-                            <img
-                                className="hero-art"
-                                src={heroWorkbench}
-                                alt="A developer workbench with a laptop, microcontroller, keyboard, and machine-learning sketches"
-                            />
-                            <span className="hero-art-caption">
-                                Built from curiosity
-                                <small>Software / ML / systems</small>
-                            </span>
-                        </Motion.div>
-
-                        <Motion.div
-                            className="hero-summary"
-                            initial={false}
-                            animate={
-                                introComplete || reduceMotion
-                                    ? { opacity: 1, y: 0 }
-                                    : { opacity: 0, y: 18 }
-                            }
-                            transition={{ duration: 0.65, delay: 0.45 }}
-                        >
-                            <p>
-                                Student developer at NCSSM working across web
-                                engineering, software systems, and machine learning.
+                        <div className="section-shell hero-content">
+                            <p className="hero-kicker">
+                                Software + machine learning engineer
                             </p>
-                            <a className="text-link" href="#work">
-                                Selected work
-                                <ArrowDown aria-hidden="true" />
-                            </a>
-                        </Motion.div>
-                    </div>
 
-                    <div className="hero-rule" aria-hidden="true">
-                        <span>Portfolio / 2026</span>
-                        <span>Scroll to explore</span>
-                    </div>
-                </section>
+                            <h1 className="hero-title max-w-6xl" id="hero-title">
+                                <span className="hero-line-window">
+                                    <span className="hero-line">Useful systems.</span>
+                                </span>
+                                <span className="hero-line-window">
+                                    <span className="hero-line hero-line-accent">
+                                        Human outcomes.
+                                    </span>
+                                </span>
+                            </h1>
 
-                <section
-                    className="work-section"
-                    id="work"
-                    data-section
-                    aria-labelledby="work-title"
-                >
-                    <div className="section-shell">
-                        <Reveal className="section-heading work-heading">
-                            <p className="eyebrow">Selected work</p>
-                            <h2 id="work-title">
-                                Built with purpose,
-                                <em>not decoration.</em>
-                            </h2>
-                            <p>
-                                A small selection of digital experiences designed
-                                and developed from concept through launch.
+                            <p className="hero-lede">
+                                I&apos;m Krish Sapovadia, a student engineer in
+                                North Carolina building thoughtful web products,
+                                dependable software, and practical AI experiments.
                             </p>
-                        </Reveal>
 
-                        <div className="project-list">
-                            {projects.map((project, index) => (
-                                <Reveal
-                                    className={`project project-${project.theme}`}
-                                    delay={index * 0.08}
-                                    key={project.name}
+                            <div className="hero-actions">
+                                <a className="button button-light" href="#work">
+                                    Explore selected work
+                                    <ArrowDown aria-hidden="true" />
+                                </a>
+                                <a
+                                    className="button button-ghost"
+                                    href="mailto:kcsapovadia@gmail.com"
                                 >
-                                    <a
-                                        className="project-visual"
-                                        href={project.url}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        aria-label={`Visit ${project.name} website`}
-                                    >
-                                        <img
-                                            src={project.image}
-                                            alt={project.imageAlt}
-                                        />
-                                        <span className="project-open">
-                                            View live
-                                            <ArrowUpRight aria-hidden="true" />
-                                        </span>
-                                    </a>
-                                    <div className="project-copy">
-                                        <div className="project-title-row">
-                                            <span>{project.number}</span>
-                                            <h3>{project.name}</h3>
-                                        </div>
-                                        <p>{project.description}</p>
-                                        <ul aria-label={`${project.name} project details`}>
-                                            {project.details.map((detail) => (
-                                                <li key={detail}>{detail}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </Reveal>
-                            ))}
+                                    Start a conversation
+                                    <ArrowUpRight aria-hidden="true" />
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                </section>
 
-                <section
-                    className="about-section section-shell"
-                    id="about"
-                    data-section
-                    aria-labelledby="about-title"
-                >
-                    <Reveal className="about-lead">
-                        <p className="eyebrow">About</p>
-                        <h2 id="about-title">
-                            Curious by nature.
-                            <em>Practical by default.</em>
-                        </h2>
-                    </Reveal>
+                        <div className="hero-context section-shell">
+                            <span>NCSSM / North Carolina</span>
+                            <span>Design-minded engineering</span>
+                        </div>
+                    </section>
 
-                    <div className="about-grid">
-                        <Reveal className="about-sticky">
-                            <figure>
-                                <img
-                                    src={krishImage}
-                                    alt="Portrait of Krish Sapovadia"
-                                />
-                                <figcaption>
-                                    <MapPin aria-hidden="true" />
-                                    North Carolina
-                                </figcaption>
-                            </figure>
-                        </Reveal>
-
-                        <div className="about-content">
-                            <Reveal>
-                                <p className="about-statement">
-                                    I&apos;m Krish, a student and self-taught
-                                    developer who likes turning complex ideas into
-                                    focused, dependable software.
+                    <section
+                        className="capabilities-section chapter"
+                        id="capabilities"
+                        data-section
+                        aria-labelledby="capabilities-title"
+                    >
+                        <div className="section-shell">
+                            <div className="chapter-heading reveal-item">
+                                <p className="chapter-kicker">
+                                    Where I do my best work
                                 </p>
-                                <p className="about-body">
-                                    I study at the North Carolina School of Science
-                                    and Mathematics, where I continue to build depth
-                                    in computer science and machine learning. I also
-                                    work with startups and small businesses to make
-                                    digital products clearer, more useful, and easier
-                                    to use.
+                                <h2 id="capabilities-title">
+                                    One builder,
+                                    <br />
+                                    multiple layers.
+                                </h2>
+                                <p>
+                                    I combine interface craft with systems thinking,
+                                    moving from an early idea to the details that make
+                                    it usable.
                                 </p>
-                            </Reveal>
+                            </div>
 
-                            <div className="capability-list">
-                                {capabilities.map((item, index) => (
-                                    <Reveal
-                                        className="capability"
-                                        delay={index * 0.06}
-                                        key={item.title}
+                            <div className="capability-bento">
+                                {capabilities.map((capability) => (
+                                    <article
+                                        className={`capability-card reveal-item ${capability.className}`}
+                                        key={capability.title}
                                     >
-                                        <span>{item.number}</span>
                                         <div>
-                                            <h3>{item.title}</h3>
-                                            <p>{item.body}</p>
+                                            <h3>{capability.title}</h3>
+                                            <p>{capability.body}</p>
                                         </div>
-                                    </Reveal>
+                                        <span>{capability.detail}</span>
+                                    </article>
                                 ))}
                             </div>
                         </div>
-                    </div>
 
-                    <Reveal className="toolkit">
-                        <p className="eyebrow">Toolkit</p>
-                        <div className="tool-grid">
-                            {toolGroups.map(([title, tools]) => (
-                                <div key={title}>
-                                    <h3>{title}</h3>
-                                    <p>{tools}</p>
+                        <div className="toolkit-marquee" aria-label="Technical toolkit">
+                            <div className="marquee-track">
+                                <div className="marquee-group">
+                                    {toolkit.map((tool) => (
+                                        <span key={tool}>{tool}</span>
+                                    ))}
                                 </div>
-                            ))}
+                                <div className="marquee-group" aria-hidden="true">
+                                    {toolkit.map((tool) => (
+                                        <span key={tool}>{tool}</span>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                    </Reveal>
-                </section>
+                    </section>
 
-                <section
-                    className="contact-section"
-                    id="contact"
-                    data-section
-                    aria-labelledby="contact-title"
-                >
-                    <div className="section-shell contact-inner">
-                        <Reveal>
-                            <p className="eyebrow">Start a conversation</p>
-                            <h2 id="contact-title">
-                                Have something
-                                <em>worth building?</em>
-                            </h2>
-                        </Reveal>
+                    <section
+                        className="work-section chapter"
+                        id="work"
+                        data-section
+                        aria-labelledby="work-title"
+                    >
+                        <div className="section-shell work-layout">
+                            <div className="work-intro">
+                                <p className="chapter-kicker">
+                                    A focused selection
+                                </p>
+                                <h2 id="work-title">
+                                    Work built
+                                    <br />
+                                    to be used.
+                                </h2>
+                                <p>
+                                    Product stories and interfaces taken from first
+                                    structure through working, responsive builds.
+                                </p>
+                                <a className="text-link light-link" href="#about">
+                                    More about my approach
+                                    <ArrowDown aria-hidden="true" />
+                                </a>
+                            </div>
 
-                        <Reveal className="contact-bottom" delay={0.08}>
-                            <p>
-                                I&apos;m interested in software, ML, and product
-                                opportunities where I can contribute, learn, and
-                                ship meaningful work.
+                            <div className="project-rail">
+                                {projects.map((project) => (
+                                    <article
+                                        className={`project-card project-${project.theme}`}
+                                        key={project.name}
+                                    >
+                                        <a
+                                            className="project-link"
+                                            href={project.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            aria-label={`Open the ${project.name} website`}
+                                        >
+                                            <div className="project-image">
+                                                <img
+                                                    src={project.image}
+                                                    alt={project.imageAlt}
+                                                />
+                                                <span className="project-open">
+                                                    View live
+                                                    <ArrowUpRight aria-hidden="true" />
+                                                </span>
+                                            </div>
+
+                                            <div className="project-copy">
+                                                <div>
+                                                    <h3>{project.name}</h3>
+                                                    <p>{project.description}</p>
+                                                </div>
+                                                <div className="project-meta">
+                                                    <ul
+                                                        aria-label={`${project.name} services`}
+                                                    >
+                                                        {project.services.map(
+                                                            (service) => (
+                                                                <li key={service}>
+                                                                    {service}
+                                                                </li>
+                                                            ),
+                                                        )}
+                                                    </ul>
+                                                    <span>{project.year}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </article>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        className="about-section chapter"
+                        id="about"
+                        data-section
+                        aria-labelledby="about-title"
+                    >
+                        <div className="section-shell">
+                            <p className="chapter-kicker reveal-item">
+                                The person behind the work
                             </p>
-                            <a
-                                className="contact-button"
-                                href="mailto:kcsapovadia@gmail.com"
-                            >
-                                <Mail aria-hidden="true" />
-                                kcsapovadia@gmail.com
-                                <ArrowUpRight aria-hidden="true" />
-                            </a>
-                        </Reveal>
-                    </div>
-                </section>
-            </main>
 
-            <Footer />
+                            <h2
+                                className="about-heading reveal-item"
+                                id="about-title"
+                            >
+                                I turn curious
+                                <span
+                                    className="about-inline-image"
+                                    aria-hidden="true"
+                                >
+                                    <img src={curiousIdeasImage} alt="" />
+                                </span>
+                                ideas into focused software that people can
+                                actually use.
+                            </h2>
+
+                            <div className="about-grid">
+                                <figure className="about-portrait reveal-item">
+                                    <div className="portrait-frame">
+                                        <img
+                                            src={krishCutout}
+                                            alt="Portrait of Krish Sapovadia"
+                                        />
+                                    </div>
+                                    <figcaption>
+                                        <MapPin aria-hidden="true" />
+                                        North Carolina
+                                    </figcaption>
+                                </figure>
+
+                                <div className="about-copy reveal-item">
+                                    <p className="about-lead">
+                                        I&apos;m a student and self-taught developer
+                                        who enjoys finding the useful idea inside a
+                                        complicated problem.
+                                    </p>
+                                    <p>
+                                        At the North Carolina School of Science and
+                                        Mathematics, I&apos;m building depth in
+                                        computer science and machine learning. Beyond
+                                        class, I work with startups and small
+                                        businesses to make digital products clearer,
+                                        more dependable, and easier to use.
+                                    </p>
+                                    <p>
+                                        My range spans responsive interfaces, Python
+                                        backends, APIs, data, embedded systems, and ML
+                                        experimentation. The common thread is simple:
+                                        understand the problem, build deliberately,
+                                        and finish well.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div
+                                className="principles-carousel reveal-item"
+                                aria-live="polite"
+                            >
+                                <div className="principle-visuals" aria-hidden="true">
+                                    <span>
+                                        <img src={principleClarity} alt="" />
+                                    </span>
+                                    <span>
+                                        <img src={principleUseful} alt="" />
+                                    </span>
+                                    <span>
+                                        <img src={principleFinish} alt="" />
+                                    </span>
+                                </div>
+
+                                <div
+                                    className="principle-copy"
+                                    key={activePrinciple.title}
+                                >
+                                    <p>What I optimize for</p>
+                                    <blockquote>
+                                        “{activePrinciple.title}”
+                                    </blockquote>
+                                    <p>{activePrinciple.body}</p>
+                                    <span>{activePrinciple.focus}</span>
+                                </div>
+
+                                <div className="carousel-controls">
+                                    <button
+                                        type="button"
+                                        onClick={() => changePrinciple(-1)}
+                                        aria-label="Previous principle"
+                                    >
+                                        <ArrowLeft aria-hidden="true" />
+                                    </button>
+                                    <span>
+                                        {principleIndex + 1} / {principles.length}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => changePrinciple(1)}
+                                        aria-label="Next principle"
+                                    >
+                                        <ArrowRight aria-hidden="true" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        className="contact-section"
+                        id="contact"
+                        data-section
+                        aria-labelledby="contact-title"
+                    >
+                        <div className="contact-glow" aria-hidden="true" />
+                        <div className="section-shell contact-inner">
+                            <div className="contact-top reveal-item">
+                                <p className="chapter-kicker">
+                                    Open to thoughtful opportunities
+                                </p>
+                                <span>Have a project, role, or ambitious idea?</span>
+                            </div>
+
+                            <h2 className="reveal-item" id="contact-title">
+                                Let&apos;s build something
+                                <em>worth using.</em>
+                            </h2>
+
+                            <div className="contact-bottom reveal-item">
+                                <p>
+                                    I&apos;m interested in software, ML, and product
+                                    work where I can contribute, learn, and ship
+                                    meaningful things with a strong team.
+                                </p>
+                                <a
+                                    className="contact-button"
+                                    href="mailto:kcsapovadia@gmail.com"
+                                >
+                                    <Mail aria-hidden="true" />
+                                    <span>
+                                        Start with an email
+                                        <small>kcsapovadia@gmail.com</small>
+                                    </span>
+                                    <ArrowUpRight aria-hidden="true" />
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <Footer />
+            </div>
         </ReactLenis>
     );
 }

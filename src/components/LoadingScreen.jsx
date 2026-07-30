@@ -135,7 +135,7 @@ function LoadingScreen({ onComplete, onReveal }) {
         >
             <div className="loader-topline" ref={topLineRef} aria-hidden="true">
                 <span>Krish Sapovadia</span>
-                <span>Portfolio / 2026</span>
+                <span>Creative engineering portfolio</span>
             </div>
 
             <div className="loader-identity" aria-hidden="true">
@@ -144,7 +144,7 @@ function LoadingScreen({ onComplete, onReveal }) {
                         KS<span>.</span>
                     </span>
                 </div>
-                <p ref={descriptorRef}>Software + ML engineer</p>
+                <p ref={descriptorRef}>Useful systems / human outcomes</p>
             </div>
 
             <div className="loader-progress" aria-hidden="true">
