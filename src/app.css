@@ -102,8 +102,8 @@
     letter-spacing: -0.09em;
 }
 
-.loader-monogram > span,
-.wordmark > span {
+.loader-monogram>span,
+.wordmark>span {
     color: var(--signal);
 }
 
@@ -120,7 +120,7 @@
     grid-template-columns: 3rem 1fr 3rem;
 }
 
-.loader-progress > span:last-child {
+.loader-progress>span:last-child {
     text-align: right;
 }
 
@@ -132,7 +132,7 @@
     background: var(--line);
 }
 
-.loader-track > span {
+.loader-track>span {
     position: absolute;
     inset: 0;
     display: block;
@@ -483,8 +483,8 @@
     letter-spacing: -0.072em;
 }
 
-.chapter-heading > p:last-child,
-.work-intro > p {
+.chapter-heading>p:last-child,
+.work-intro>p {
     max-width: 27rem;
     margin: 0 0 0.35rem;
     color: var(--muted);
@@ -562,7 +562,7 @@
     opacity: 0.72;
 }
 
-.capability-card > span {
+.capability-card>span {
     display: block;
     margin-top: 3rem;
     font-size: 0.64rem;
@@ -704,7 +704,7 @@
     margin-top: 2rem;
 }
 
-.work-intro > p {
+.work-intro>p {
     margin-top: 2.5rem;
     color: rgb(255 255 255 / 54%);
 }
@@ -875,14 +875,14 @@
 }
 
 .project-meta li,
-.project-meta > span {
+.project-meta>span {
     font-size: 0.62rem;
     font-weight: 600;
     letter-spacing: 0.07em;
     text-transform: uppercase;
 }
 
-.project-meta > span {
+.project-meta>span {
     opacity: 0.45;
 }
 
@@ -957,6 +957,7 @@
     filter: grayscale(1) contrast(1.05);
     object-fit: contain;
     object-position: center bottom;
+    border-radius: 5rem;
 }
 
 .about-portrait figcaption {
@@ -987,7 +988,7 @@
     text-wrap: pretty;
 }
 
-.about-copy p + p {
+.about-copy p+p {
     margin-top: 1.6rem;
 }
 
@@ -1061,8 +1062,8 @@
     animation: principle-enter 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.principle-copy > p:first-child,
-.principle-copy > span {
+.principle-copy>p:first-child,
+.principle-copy>span {
     margin: 0;
     color: rgb(255 255 255 / 48%);
     font-size: 0.64rem;
@@ -1081,7 +1082,7 @@
     letter-spacing: -0.055em;
 }
 
-.principle-copy > p:not(:first-child) {
+.principle-copy>p:not(:first-child) {
     max-width: 40rem;
     margin: 0 0 2rem;
     color: rgb(255 255 255 / 68%);
@@ -1124,7 +1125,7 @@
     height: 1rem;
 }
 
-.carousel-controls > span {
+.carousel-controls>span {
     color: rgb(255 255 255 / 45%);
     font-size: 0.65rem;
     font-variant-numeric: tabular-nums;
@@ -1178,11 +1179,11 @@
 }
 
 .contact-top .chapter-kicker,
-.contact-top > span {
+.contact-top>span {
     color: rgb(255 255 255 / 45%);
 }
 
-.contact-top > span {
+.contact-top>span {
     font-size: 0.72rem;
 }
 
@@ -1211,7 +1212,7 @@
     border-top: 1px solid var(--light-line);
 }
 
-.contact-bottom > p {
+.contact-bottom>p {
     max-width: 31rem;
     margin: 0;
     color: rgb(255 255 255 / 52%);
@@ -1239,12 +1240,12 @@
     transform: translateY(-4px);
 }
 
-.contact-button > svg {
+.contact-button>svg {
     width: 1.1rem;
     height: 1.1rem;
 }
 
-.contact-button > svg:last-child {
+.contact-button>svg:last-child {
     justify-self: end;
 }
 
@@ -1277,7 +1278,7 @@
     border-top: 1px solid var(--light-line);
 }
 
-.footer-inner > p {
+.footer-inner>p {
     display: grid;
     gap: 0.25rem;
     margin: 0;
@@ -1285,7 +1286,7 @@
     font-size: 0.7rem;
 }
 
-.footer-inner > p span {
+.footer-inner>p span {
     color: rgb(255 255 255 / 36%);
     font-size: 0.61rem;
     letter-spacing: 0.06em;
@@ -1433,7 +1434,7 @@
         grid-template-columns: 1fr 2fr;
     }
 
-    .chapter-heading > p:last-child {
+    .chapter-heading>p:last-child {
         grid-column: 2;
     }
 
@@ -1486,7 +1487,7 @@
         grid-template-columns: 1fr auto auto;
     }
 
-    .footer-inner > p {
+    .footer-inner>p {
         display: none;
     }
 }
@@ -1597,7 +1598,7 @@
         font-size: clamp(3.55rem, 17vw, 6rem);
     }
 
-    .chapter-heading > p:last-child {
+    .chapter-heading>p:last-child {
         grid-column: 1;
     }
 
@@ -1629,7 +1630,7 @@
         gap: 4rem;
     }
 
-    .work-intro > p {
+    .work-intro>p {
         margin-top: 1.7rem;
     }
 
@@ -1775,6 +1776,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {

@@ -103,6 +103,7 @@ const toolkit = [
     'Tailwind CSS',
     'C / C++',
     'Git',
+    'Tauri',
 ];
 
 const principles = [
@@ -391,7 +392,7 @@ function App() {
                                 </span>
                                 <span className="hero-line-window">
                                     <span className="hero-line hero-line-accent">
-                                        Human outcomes.
+                                        Better design.
                                     </span>
                                 </span>
                             </h1>
